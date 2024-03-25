@@ -35,7 +35,7 @@ import {
 //   removeAllPlayersFromTeamRQ,
 // } from '../../dist';
 // utilities
-import { createNewTeamData } from '../constants/functions';
+//import { createNewTeamData } from '../constants/functions';
 
 // types
 import { SeasonName, TeamId } from '../types/sharedTypes';
@@ -44,6 +44,21 @@ import { updateSeasonRQ } from './seasonUpdateHooks';
 import { fetchSeasonRQ } from './seasonFetchHooks';
 import { removeAllPlayersFromTeamRQ } from './teamToPlayerOperations';
 import { HookProps, mutationConfig } from '../constants/utilities';
+
+export const createNewTeamData = (teamName: string, seasonId: SeasonName) => ({
+  teamName,
+  seasonId,
+  players: {
+    captain: {},
+    player2: {},
+    player3: {},
+    player4: {},
+    player5: {},
+  },
+  wins: 0,
+  losses: 0,
+  points: 0,
+});
 
 // ------------------------------
 // 1. HOOKS
