@@ -13,37 +13,26 @@
 //------------------------
 // IMPORTS
 //------------------------
+
 // react-query
 import { useMutation } from 'react-query';
+import { updateSeasonRQ } from './seasonUpdateHooks';
+import { fetchSeasonRQ } from './seasonFetchHooks';
+import { removeAllPlayersFromTeamRQ } from './teamToPlayerOperations';
 
 //firebase
 import { db } from '../../firebaseConfig';
 import {
   collection,
-  query,
-  where,
   updateDoc,
   deleteDoc,
-  addDoc,
   doc,
   runTransaction,
-  setDoc,
 } from '@firebase/firestore';
-// import {
-//   updateSeasonRQ,
-//   fetchSeasonRQ,
-//   removeAllPlayersFromTeamRQ,
-// } from '../../dist';
-// utilities
-//import { createNewTeamData } from '../constants/functions';
 
 // types
 import { SeasonName, TeamId } from '../types/sharedTypes';
 import { Team } from '../types/teamTypes';
-import { updateSeasonRQ } from './seasonUpdateHooks';
-import { fetchSeasonRQ } from './seasonFetchHooks';
-import { removeAllPlayersFromTeamRQ } from './teamToPlayerOperations';
-import { HookProps, mutationConfig } from '../constants/utilities';
 
 export const createNewTeamData = (teamName: string, seasonId: SeasonName) => ({
   teamName,
@@ -74,8 +63,8 @@ export const createNewTeamData = (teamName: string, seasonId: SeasonName) => ({
  * @returns Object with removeTeam function and mutation result/methods
  */
 
-export const useRemoveTeamFromSeason = (props: HookProps<void> = {}) => {
-  const mutation = useMutation(removeTeamFromSeasonRQ, mutationConfig(props));
+export const useRemoveTeamFromSeason = () => {
+  const mutation = useMutation(removeTeamFromSeasonRQ);
   const removeTeam = async (seasonName: SeasonName, teamId: TeamId) => {
     try {
       await mutation.mutateAsync({ seasonName, teamId });
@@ -90,12 +79,12 @@ export const useRemoveTeamFromSeason = (props: HookProps<void> = {}) => {
   return { removeTeam, ...mutation };
 };
 
-export const useUpdateTeamData = (props: HookProps<void> = {}) => {
-  return useMutation(updateTeamDataRQ, mutationConfig(props));
+export const useUpdateTeamData = () => {
+  return useMutation(updateTeamDataRQ);
 };
 
-export const useAddNewTeamToSeason = (props: HookProps<void> = {}) => {
-  return useMutation(addNewTeamToSeasonRQ, mutationConfig(props));
+export const useAddNewTeamToSeason = () => {
+  return useMutation(addNewTeamToSeasonRQ);
 };
 // ------------------------------
 // 2. FIREBASE FUNCTIONS

@@ -11,10 +11,16 @@
 //------------------------
 // IMPORTS
 //------------------------
+
+// react query
 import { useQuery, UseQueryOptions } from 'react-query';
+import { fetchSeasonRQ } from './seasonFetchHooks';
+
+// firebase
 import { db } from '../../firebaseConfig';
 import { doc, getDoc } from '@firebase/firestore';
-import { fetchSeasonRQ } from './seasonFetchHooks';
+
+// types
 import { SeasonName } from '../types/sharedTypes';
 import { Team } from '../types/teamTypes';
 

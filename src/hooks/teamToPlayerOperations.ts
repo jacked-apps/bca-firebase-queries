@@ -20,6 +20,20 @@
 //    - insertPlayerOntoTeam
 //    - removeAllPlayersFromTeamRQ
 
+//------------------------
+// IMPORTS
+//------------------------
+
+// react query
+import { useMutation } from 'react-query';
+import { fetchTeamByIdRQ } from './teamFetchHooks';
+import {
+  fetchCurrentUserById,
+  fetchPastPlayerByIdRQ,
+} from './playerFetchHooks';
+
+// firebase
+import { db } from '../../firebaseConfig';
 import {
   doc,
   updateDoc,
@@ -28,24 +42,17 @@ import {
   arrayRemove,
   runTransaction,
 } from '@firebase/firestore'; // Import getFirestore from Firebase
-import { db } from '../../firebaseConfig';
-
-// import {
-//   fetchCurrentUserById,
-//   fetchPastPlayerByIdRQ,
-//   fetchTeamByIdRQ,
-// } from '../../dist';
-import { useMutation } from 'react-query';
 
 // types
 import { TeamId, Email, PlayerId } from '../types/sharedTypes';
 import { TeamPlayerRole, TeamPlayer, Team } from '../types/teamTypes';
-import {
-  fetchCurrentUserById,
-  fetchPastPlayerByIdRQ,
-} from './playerFetchHooks';
-import { fetchTeamByIdRQ } from './teamFetchHooks';
 
+/**
+ * Hook to add a player to a team.
+ * On success, logs a message.
+ * On error, logs a message.
+ * @returns The mutation function to add a player to a team.
+ */
 export const useAddPlayerToTeam = () => {
   return useMutation(addPlayerToTeamRQ, {
     onSuccess: () => {
@@ -58,6 +65,12 @@ export const useAddPlayerToTeam = () => {
   });
 };
 
+/**
+ * Hook to add a team to both currentPlayer and pastPlayer.
+ * On success, logs a message.
+ * On error, logs a message.
+ * @returns The mutation function to add a team to both player teams.
+ */
 export const useAddTeamToBothViaPlayer = () => {
   return useMutation(addTeamToBothWithPlayer, {
     onSuccess: () => {
@@ -70,6 +83,12 @@ export const useAddTeamToBothViaPlayer = () => {
   });
 };
 
+/**
+ * Hook to add a team to both currentPlayer and pastPlayer.
+ * On success, logs a message.
+ * On error, logs a message.
+ * @returns The mutation function to add a team to both player teams.
+ */
 export const useAddTeamToBothViaUser = () => {
   return useMutation(addTeamToBothWithUser, {
     onSuccess: () => {
@@ -82,6 +101,12 @@ export const useAddTeamToBothViaUser = () => {
   });
 };
 
+/**
+ * Hook to remove a team from both currentPlayer and pastPlayer.
+ * On success, logs a message.
+ * On error, logs a message.
+ * @returns The mutation function to remove a team from both player teams.
+ */
 export const useRemoveTeamFromBothViaPlayer = () => {
   return useMutation(removeTeamFromBothWithPlayer, {
     onSuccess: () => {
@@ -94,6 +119,12 @@ export const useRemoveTeamFromBothViaPlayer = () => {
   });
 };
 
+/**
+ * Hook to remove a team from both currentPlayer and pastPlayer.
+ * On success, logs a message.
+ * On error, logs a message.
+ * @returns The mutation function to remove a team from both player teams.
+ */
 export const useRemoveTeamFromBothViaUser = () => {
   return useMutation(removeTeamFromBothWithUser, {
     onSuccess: () => {

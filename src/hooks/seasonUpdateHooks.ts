@@ -9,31 +9,25 @@
 //------------------------
 // IMPORTS
 //------------------------
-import { useMutation } from 'react-query';
-import { db } from '../../firebaseConfig';
-import {
-  collection,
-  query,
-  where,
-  updateDoc,
-  deleteDoc,
-  addDoc,
-  doc,
-  setDoc,
-} from '@firebase/firestore';
 
-import { HookProps, mutationConfig } from '../constants/utilities';
-import { toast } from 'react-toastify';
+// react query
+import { useMutation } from 'react-query';
+import { fetchSeasonRQ } from './seasonFetchHooks';
+
+// firebase
+import { db } from '../../firebaseConfig';
+import { updateDoc, doc, setDoc } from '@firebase/firestore';
+
+// types
 import { Season } from '../types/seasonTypes';
 import { SeasonName } from '../types/sharedTypes';
-import { fetchSeasonRQ } from './seasonFetchHooks';
 
 // ------------------------------
 // 1. HOOKS
 // ------------------------------
 
-export const useAddSeason = (props: HookProps<void> = {}) => {
-  const mutation = useMutation(addSeasonRQ, mutationConfig(props));
+export const useAddSeason = () => {
+  const mutation = useMutation(addSeasonRQ);
 
   const addSeason = async (seasonName: string, seasonData: Season) => {
     mutation.mutate({ seasonName, seasonData });
@@ -42,8 +36,8 @@ export const useAddSeason = (props: HookProps<void> = {}) => {
   return { addSeason, ...mutation };
 };
 
-export const useUpdateSeason = (props: HookProps<void> = {}) => {
-  return useMutation(updateSeasonRQ, mutationConfig(props));
+export const useUpdateSeason = () => {
+  return useMutation(updateSeasonRQ);
 };
 
 // ------------------------------

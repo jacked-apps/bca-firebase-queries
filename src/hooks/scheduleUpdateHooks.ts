@@ -9,27 +9,24 @@
 //------------------------
 // IMPORTS
 //------------------------
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+
+// react-query
+import { useMutation } from 'react-query';
+
+// firebase
 import { db } from '../../firebaseConfig';
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  updateDoc,
-  doc,
-  getDoc,
-} from '@firebase/firestore';
+import { updateDoc, doc } from '@firebase/firestore';
+
+//types
 import { Schedule } from '../types/seasonTypes';
 import { SeasonName } from '../types/sharedTypes';
-import { HookProps, mutationConfig } from '../constants/utilities';
 
 // ------------------------------
 // 1. HOOKS
 // ------------------------------
 
-export const useUpdateSeasonSchedule = (props: HookProps<void> = {}) => {
-  return useMutation(updateSeasonScheduleRQ, mutationConfig(props));
+export const useUpdateSeasonSchedule = () => {
+  return useMutation(updateSeasonScheduleRQ);
 };
 
 // ------------------------------

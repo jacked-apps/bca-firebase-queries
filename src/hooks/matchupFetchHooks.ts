@@ -11,16 +11,15 @@
 //------------------------
 // IMPORTS
 //------------------------
+
+// react query
 import { useQuery } from 'react-query';
+
+// firebase
 import { db } from '../../firebaseConfig';
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc,
-} from '@firebase/firestore';
+import { doc, getDoc } from '@firebase/firestore';
+
+// types
 import { SeasonName } from '../types/sharedTypes';
 
 import {
