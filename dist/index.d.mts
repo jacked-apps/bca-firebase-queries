@@ -2,14 +2,6 @@ import * as react_query from 'react-query';
 import { Timestamp as Timestamp$1 } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 
-type HookProps<T> = {
-    useToast?: boolean;
-    successToastLength?: number;
-    successMessage?: string;
-    failedMessage?: string;
-    onFetchSuccess?: (data: T) => void;
-};
-
 type Timestamp = Timestamp$1;
 type SeasonName = string;
 type Email = string;
@@ -58,7 +50,7 @@ type Holiday = {
     type: string;
 };
 
-declare const useAddSeason: (props?: HookProps<void>) => {
+declare const useAddSeason: () => {
     data: undefined;
     error: null;
     isError: false;
@@ -159,7 +151,7 @@ declare const useAddSeason: (props?: HookProps<void>) => {
     }, unknown>;
     addSeason: (seasonName: string, seasonData: Season) => Promise<void>;
 };
-declare const useUpdateSeason: (props?: HookProps<void>) => react_query.UseMutationResult<void, unknown, {
+declare const useUpdateSeason: () => react_query.UseMutationResult<void, unknown, {
     seasonName: SeasonName;
     seasonData: Partial<Season>;
 }, unknown>;
@@ -265,7 +257,7 @@ declare const fetchPastPlayerByIdRQ: (playerId: Email | undefined) => Promise<Pa
  */
 declare const fetchCurrentUserById: (id: string | undefined) => Promise<CurrentUser | null>;
 
-declare const useUpdateSeasonSchedule: (props?: HookProps<void>) => react_query.UseMutationResult<void, unknown, {
+declare const useUpdateSeasonSchedule: () => react_query.UseMutationResult<void, unknown, {
     seasonName: SeasonName;
     schedule: Schedule;
 }, unknown>;
@@ -453,14 +445,44 @@ declare const useFetchTeamsFromSeason: (seasonName: SeasonName | undefined) => r
  */
 declare const fetchTeamByIdRQ: (teamId: string | undefined) => Promise<Team | null>;
 
+/**
+ * Hook to add a player to a team.
+ * On success, logs a message.
+ * On error, logs a message.
+ * @returns The mutation function to add a player to a team.
+ */
 declare const useAddPlayerToTeam: () => react_query.UseMutationResult<void, unknown, {
     teamId: TeamId;
     role: TeamPlayerRole;
     playerData: TeamPlayer;
 }, unknown>;
+/**
+ * Hook to add a team to both currentPlayer and pastPlayer.
+ * On success, logs a message.
+ * On error, logs a message.
+ * @returns The mutation function to add a team to both player teams.
+ */
 declare const useAddTeamToBothViaPlayer: () => react_query.UseMutationResult<void, unknown, string | undefined, unknown>;
+/**
+ * Hook to add a team to both currentPlayer and pastPlayer.
+ * On success, logs a message.
+ * On error, logs a message.
+ * @returns The mutation function to add a team to both player teams.
+ */
 declare const useAddTeamToBothViaUser: () => react_query.UseMutationResult<void, unknown, string | undefined, unknown>;
+/**
+ * Hook to remove a team from both currentPlayer and pastPlayer.
+ * On success, logs a message.
+ * On error, logs a message.
+ * @returns The mutation function to remove a team from both player teams.
+ */
 declare const useRemoveTeamFromBothViaPlayer: () => react_query.UseMutationResult<void, unknown, string | undefined, unknown>;
+/**
+ * Hook to remove a team from both currentPlayer and pastPlayer.
+ * On success, logs a message.
+ * On error, logs a message.
+ * @returns The mutation function to remove a team from both player teams.
+ */
 declare const useRemoveTeamFromBothViaUser: () => react_query.UseMutationResult<void, unknown, string | undefined, unknown>;
 /**
  * Removes all players from a team by:
@@ -499,7 +521,7 @@ declare const createNewTeamData: (teamName: string, seasonId: SeasonName) => {
  * @param props - Optional config props for useMutation
  * @returns Object with removeTeam function and mutation result/methods
  */
-declare const useRemoveTeamFromSeason: (props?: HookProps<void>) => {
+declare const useRemoveTeamFromSeason: () => {
     data: undefined;
     error: null;
     isError: false;
@@ -600,11 +622,11 @@ declare const useRemoveTeamFromSeason: (props?: HookProps<void>) => {
     }, unknown>;
     removeTeam: (seasonName: SeasonName, teamId: TeamId) => Promise<void>;
 };
-declare const useUpdateTeamData: (props?: HookProps<void>) => react_query.UseMutationResult<void, unknown, {
+declare const useUpdateTeamData: () => react_query.UseMutationResult<void, unknown, {
     teamId: TeamId;
     data: Team;
 }, unknown>;
-declare const useAddNewTeamToSeason: (props?: HookProps<void>) => react_query.UseMutationResult<void, unknown, {
+declare const useAddNewTeamToSeason: () => react_query.UseMutationResult<void, unknown, {
     seasonName: SeasonName;
     teamName: string;
 }, unknown>;

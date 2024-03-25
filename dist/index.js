@@ -18425,6 +18425,9 @@ module.exports = __toCommonJS(src_exports);
 // src/hooks/seasonUpdateHooks.ts
 var import_react_query2 = require("react-query");
 
+// src/hooks/seasonFetchHooks.ts
+var import_react_query = require("react-query");
+
 // firebaseConfig.ts
 var import_app = require("firebase/app");
 var import_firestore = require("firebase/firestore");
@@ -23603,9 +23606,9 @@ var PersistencePromise = class _PersistencePromise {
     }
     return p2;
   }
-  static forEach(collection5, f) {
+  static forEach(collection2, f) {
     const promises = [];
-    collection5.forEach((r2, s) => {
+    collection2.forEach((r2, s) => {
       promises.push(f.call(this, r2, s));
     });
     return this.waitFor(promises);
@@ -26156,25 +26159,25 @@ function newQuery(path, collectionGroup, explicitOrderBy, filters, limit, limitT
 function newQueryForPath(path) {
   return new QueryImpl(path);
 }
-function asCollectionQueryAtPath(query6, path) {
+function asCollectionQueryAtPath(query2, path) {
   return new QueryImpl(
     path,
     /*collectionGroup=*/
     null,
-    query6.explicitOrderBy.slice(),
-    query6.filters.slice(),
-    query6.limit,
-    query6.limitType,
-    query6.startAt,
-    query6.endAt
+    query2.explicitOrderBy.slice(),
+    query2.filters.slice(),
+    query2.limit,
+    query2.limitType,
+    query2.startAt,
+    query2.endAt
   );
 }
-function queryMatchesAllDocuments(query6) {
-  return query6.filters.length === 0 && query6.limit === null && query6.startAt == null && query6.endAt == null && (query6.explicitOrderBy.length === 0 || query6.explicitOrderBy.length === 1 && query6.explicitOrderBy[0].field.isKeyField());
+function queryMatchesAllDocuments(query2) {
+  return query2.filters.length === 0 && query2.limit === null && query2.startAt == null && query2.endAt == null && (query2.explicitOrderBy.length === 0 || query2.explicitOrderBy.length === 1 && query2.explicitOrderBy[0].field.isKeyField());
 }
-function getInequalityFilterFields(query6) {
+function getInequalityFilterFields(query2) {
   let result = new SortedSet(FieldPath$1.comparator);
-  query6.filters.forEach((filter) => {
+  query2.filters.forEach((filter) => {
     const subFilters = filter.getFlattenedFilters();
     subFilters.forEach((filter2) => {
       if (filter2.isInequality()) {
@@ -26184,14 +26187,14 @@ function getInequalityFilterFields(query6) {
   });
   return result;
 }
-function isDocumentQuery$1(query6) {
-  return DocumentKey.isDocumentKey(query6.path) && query6.collectionGroup === null && query6.filters.length === 0;
+function isDocumentQuery$1(query2) {
+  return DocumentKey.isDocumentKey(query2.path) && query2.collectionGroup === null && query2.filters.length === 0;
 }
-function isCollectionGroupQuery(query6) {
-  return query6.collectionGroup !== null;
+function isCollectionGroupQuery(query2) {
+  return query2.collectionGroup !== null;
 }
-function queryNormalizedOrderBy(query6) {
-  const queryImpl = debugCast(query6);
+function queryNormalizedOrderBy(query2) {
+  const queryImpl = debugCast(query2);
   if (queryImpl.memoizedNormalizedOrderBy === null) {
     queryImpl.memoizedNormalizedOrderBy = [];
     const fieldsNormalized = /* @__PURE__ */ new Set();
@@ -26212,10 +26215,10 @@ function queryNormalizedOrderBy(query6) {
   }
   return queryImpl.memoizedNormalizedOrderBy;
 }
-function queryToTarget(query6) {
-  const queryImpl = debugCast(query6);
+function queryToTarget(query2) {
+  const queryImpl = debugCast(query2);
   if (!queryImpl.memoizedTarget) {
-    queryImpl.memoizedTarget = _queryToTarget(queryImpl, queryNormalizedOrderBy(query6));
+    queryImpl.memoizedTarget = _queryToTarget(queryImpl, queryNormalizedOrderBy(query2));
   }
   return queryImpl.memoizedTarget;
 }
@@ -26232,67 +26235,67 @@ function _queryToTarget(queryImpl, orderBys) {
     return newTarget(queryImpl.path, queryImpl.collectionGroup, orderBys, queryImpl.filters, queryImpl.limit, startAt, endAt);
   }
 }
-function queryWithAddedFilter(query6, filter) {
-  const newFilters = query6.filters.concat([filter]);
-  return new QueryImpl(query6.path, query6.collectionGroup, query6.explicitOrderBy.slice(), newFilters, query6.limit, query6.limitType, query6.startAt, query6.endAt);
+function queryWithAddedFilter(query2, filter) {
+  const newFilters = query2.filters.concat([filter]);
+  return new QueryImpl(query2.path, query2.collectionGroup, query2.explicitOrderBy.slice(), newFilters, query2.limit, query2.limitType, query2.startAt, query2.endAt);
 }
-function queryWithLimit(query6, limit, limitType) {
-  return new QueryImpl(query6.path, query6.collectionGroup, query6.explicitOrderBy.slice(), query6.filters.slice(), limit, limitType, query6.startAt, query6.endAt);
+function queryWithLimit(query2, limit, limitType) {
+  return new QueryImpl(query2.path, query2.collectionGroup, query2.explicitOrderBy.slice(), query2.filters.slice(), limit, limitType, query2.startAt, query2.endAt);
 }
 function queryEquals(left, right) {
   return targetEquals(queryToTarget(left), queryToTarget(right)) && left.limitType === right.limitType;
 }
-function canonifyQuery(query6) {
-  return `${canonifyTarget(queryToTarget(query6))}|lt:${query6.limitType}`;
+function canonifyQuery(query2) {
+  return `${canonifyTarget(queryToTarget(query2))}|lt:${query2.limitType}`;
 }
-function stringifyQuery(query6) {
-  return `Query(target=${stringifyTarget(queryToTarget(query6))}; limitType=${query6.limitType})`;
+function stringifyQuery(query2) {
+  return `Query(target=${stringifyTarget(queryToTarget(query2))}; limitType=${query2.limitType})`;
 }
-function queryMatches(query6, doc2) {
-  return doc2.isFoundDocument() && queryMatchesPathAndCollectionGroup(query6, doc2) && queryMatchesOrderBy(query6, doc2) && queryMatchesFilters(query6, doc2) && queryMatchesBounds(query6, doc2);
+function queryMatches(query2, doc2) {
+  return doc2.isFoundDocument() && queryMatchesPathAndCollectionGroup(query2, doc2) && queryMatchesOrderBy(query2, doc2) && queryMatchesFilters(query2, doc2) && queryMatchesBounds(query2, doc2);
 }
-function queryMatchesPathAndCollectionGroup(query6, doc2) {
+function queryMatchesPathAndCollectionGroup(query2, doc2) {
   const docPath = doc2.key.path;
-  if (query6.collectionGroup !== null) {
-    return doc2.key.hasCollectionId(query6.collectionGroup) && query6.path.isPrefixOf(docPath);
-  } else if (DocumentKey.isDocumentKey(query6.path)) {
-    return query6.path.isEqual(docPath);
+  if (query2.collectionGroup !== null) {
+    return doc2.key.hasCollectionId(query2.collectionGroup) && query2.path.isPrefixOf(docPath);
+  } else if (DocumentKey.isDocumentKey(query2.path)) {
+    return query2.path.isEqual(docPath);
   } else {
-    return query6.path.isImmediateParentOf(docPath);
+    return query2.path.isImmediateParentOf(docPath);
   }
 }
-function queryMatchesOrderBy(query6, doc2) {
-  for (const orderBy of queryNormalizedOrderBy(query6)) {
+function queryMatchesOrderBy(query2, doc2) {
+  for (const orderBy of queryNormalizedOrderBy(query2)) {
     if (!orderBy.field.isKeyField() && doc2.data.field(orderBy.field) === null) {
       return false;
     }
   }
   return true;
 }
-function queryMatchesFilters(query6, doc2) {
-  for (const filter of query6.filters) {
+function queryMatchesFilters(query2, doc2) {
+  for (const filter of query2.filters) {
     if (!filter.matches(doc2)) {
       return false;
     }
   }
   return true;
 }
-function queryMatchesBounds(query6, doc2) {
-  if (query6.startAt && !boundSortsBeforeDocument(query6.startAt, queryNormalizedOrderBy(query6), doc2)) {
+function queryMatchesBounds(query2, doc2) {
+  if (query2.startAt && !boundSortsBeforeDocument(query2.startAt, queryNormalizedOrderBy(query2), doc2)) {
     return false;
   }
-  if (query6.endAt && !boundSortsAfterDocument(query6.endAt, queryNormalizedOrderBy(query6), doc2)) {
+  if (query2.endAt && !boundSortsAfterDocument(query2.endAt, queryNormalizedOrderBy(query2), doc2)) {
     return false;
   }
   return true;
 }
-function queryCollectionGroup(query6) {
-  return query6.collectionGroup || (query6.path.length % 2 === 1 ? query6.path.lastSegment() : query6.path.get(query6.path.length - 2));
+function queryCollectionGroup(query2) {
+  return query2.collectionGroup || (query2.path.length % 2 === 1 ? query2.path.lastSegment() : query2.path.get(query2.path.length - 2));
 }
-function newQueryComparator(query6) {
+function newQueryComparator(query2) {
   return (d1, d2) => {
     let comparedOnKeyField = false;
-    for (const orderBy of queryNormalizedOrderBy(query6)) {
+    for (const orderBy of queryNormalizedOrderBy(query2)) {
       const comp = compareDocs(orderBy, d1, d2);
       if (comp !== 0) {
         return comp;
@@ -26406,9 +26409,9 @@ function documentMap(...docs) {
 function newOverlayedDocumentMap() {
   return newDocumentKeyMap();
 }
-function convertOverlayedDocumentMapToDocumentMap(collection5) {
+function convertOverlayedDocumentMapToDocumentMap(collection2) {
   let documents = EMPTY_DOCUMENT_MAP;
-  collection5.forEach((k2, v2) => documents = documents.insert(k2, v2.overlayedDocument));
+  collection2.forEach((k2, v2) => documents = documents.insert(k2, v2.overlayedDocument));
   return documents;
 }
 function newOverlayMap() {
@@ -28115,9 +28118,9 @@ function toQueryTarget(serializer, target) {
     queryTarget.structuredQuery.from = [{ collectionId: path.lastSegment() }];
   }
   queryTarget.parent = toQueryPath(serializer, parent);
-  const where6 = toFilters(target.filters);
-  if (where6) {
-    queryTarget.structuredQuery.where = where6;
+  const where2 = toFilters(target.filters);
+  if (where2) {
+    queryTarget.structuredQuery.where = where2;
   }
   const orderBy = toOrder(target.orderBy);
   if (orderBy) {
@@ -28137,12 +28140,12 @@ function toQueryTarget(serializer, target) {
 }
 function convertQueryTargetToQuery(target) {
   let path = fromQueryPath(target.parent);
-  const query6 = target.structuredQuery;
-  const fromCount = query6.from ? query6.from.length : 0;
+  const query2 = target.structuredQuery;
+  const fromCount = query2.from ? query2.from.length : 0;
   let collectionGroup = null;
   if (fromCount > 0) {
     hardAssert(fromCount === 1);
-    const from = query6.from[0];
+    const from = query2.from[0];
     if (from.allDescendants) {
       collectionGroup = from.collectionId;
     } else {
@@ -28150,24 +28153,24 @@ function convertQueryTargetToQuery(target) {
     }
   }
   let filterBy = [];
-  if (query6.where) {
-    filterBy = fromFilters(query6.where);
+  if (query2.where) {
+    filterBy = fromFilters(query2.where);
   }
   let orderBy = [];
-  if (query6.orderBy) {
-    orderBy = fromOrder(query6.orderBy);
+  if (query2.orderBy) {
+    orderBy = fromOrder(query2.orderBy);
   }
   let limit = null;
-  if (query6.limit) {
-    limit = fromInt32Proto(query6.limit);
+  if (query2.limit) {
+    limit = fromInt32Proto(query2.limit);
   }
   let startAt = null;
-  if (query6.startAt) {
-    startAt = fromStartAtCursor(query6.startAt);
+  if (query2.startAt) {
+    startAt = fromStartAtCursor(query2.startAt);
   }
   let endAt = null;
-  if (query6.endAt) {
-    endAt = fromEndAtCursor(query6.endAt);
+  if (query2.endAt) {
+    endAt = fromEndAtCursor(query2.endAt);
   }
   return newQuery(path, collectionGroup, orderBy, filterBy, limit, "F", startAt, endAt);
 }
@@ -28509,19 +28512,19 @@ var LocalSerializer = class {
   }
 };
 function fromBundledQuery(bundledQuery) {
-  const query6 = convertQueryTargetToQuery({
+  const query2 = convertQueryTargetToQuery({
     parent: bundledQuery.parent,
     structuredQuery: bundledQuery.structuredQuery
   });
   if (bundledQuery.limitType === "LAST") {
     return queryWithLimit(
-      query6,
-      query6.limit,
+      query2,
+      query2.limit,
       "L"
       /* LimitType.Last */
     );
   }
-  return query6;
+  return query2;
 }
 function fromProtoNamedQuery(namedQuery) {
   return {
@@ -29024,13 +29027,13 @@ var LocalDocumentsView = class {
    * @param context - A optional tracker to keep a record of important details
    *   during database local query execution.
    */
-  getDocumentsMatchingQuery(transaction, query6, offset, context) {
-    if (isDocumentQuery$1(query6)) {
-      return this.getDocumentsMatchingDocumentQuery(transaction, query6.path);
-    } else if (isCollectionGroupQuery(query6)) {
-      return this.getDocumentsMatchingCollectionGroupQuery(transaction, query6, offset, context);
+  getDocumentsMatchingQuery(transaction, query2, offset, context) {
+    if (isDocumentQuery$1(query2)) {
+      return this.getDocumentsMatchingDocumentQuery(transaction, query2.path);
+    } else if (isCollectionGroupQuery(query2)) {
+      return this.getDocumentsMatchingCollectionGroupQuery(transaction, query2, offset, context);
     } else {
-      return this.getDocumentsMatchingCollectionQuery(transaction, query6, offset, context);
+      return this.getDocumentsMatchingCollectionQuery(transaction, query2, offset, context);
     }
   }
   /**
@@ -29080,12 +29083,12 @@ var LocalDocumentsView = class {
       return result;
     });
   }
-  getDocumentsMatchingCollectionGroupQuery(transaction, query6, offset, context) {
-    const collectionId = query6.collectionGroup;
+  getDocumentsMatchingCollectionGroupQuery(transaction, query2, offset, context) {
+    const collectionId = query2.collectionGroup;
     let results = documentMap();
     return this.indexManager.getCollectionParents(transaction, collectionId).next((parents) => {
       return PersistencePromise.forEach(parents, (parent) => {
-        const collectionQuery = asCollectionQueryAtPath(query6, parent.child(collectionId));
+        const collectionQuery = asCollectionQueryAtPath(query2, parent.child(collectionId));
         return this.getDocumentsMatchingCollectionQuery(transaction, collectionQuery, offset, context).next((r2) => {
           r2.forEach((key, doc2) => {
             results = results.insert(key, doc2);
@@ -29094,11 +29097,11 @@ var LocalDocumentsView = class {
       }).next(() => results);
     });
   }
-  getDocumentsMatchingCollectionQuery(transaction, query6, offset, context) {
+  getDocumentsMatchingCollectionQuery(transaction, query2, offset, context) {
     let overlays;
-    return this.documentOverlayCache.getOverlaysForCollection(transaction, query6.path, offset.largestBatchId).next((result) => {
+    return this.documentOverlayCache.getOverlaysForCollection(transaction, query2.path, offset.largestBatchId).next((result) => {
       overlays = result;
-      return this.remoteDocumentCache.getDocumentsMatchingQuery(transaction, query6, offset, overlays, context);
+      return this.remoteDocumentCache.getDocumentsMatchingQuery(transaction, query2, offset, overlays, context);
     }).next((remoteDocuments) => {
       overlays.forEach((_, overlay) => {
         const key = overlay.getKey();
@@ -29112,7 +29115,7 @@ var LocalDocumentsView = class {
         if (overlay !== void 0) {
           mutationApplyToLocalView(overlay.mutation, document2, FieldMask.empty(), Timestamp.now());
         }
-        if (queryMatches(query6, document2)) {
+        if (queryMatches(query2, document2)) {
           results = results.insert(key, document2);
         }
       });
@@ -29136,8 +29139,8 @@ var MemoryBundleCache = class {
   getNamedQuery(transaction, queryName) {
     return PersistencePromise.resolve(this.namedQueries.get(queryName));
   }
-  saveNamedQuery(transaction, query6) {
-    this.namedQueries.set(query6.name, fromProtoNamedQuery(query6));
+  saveNamedQuery(transaction, query2) {
+    this.namedQueries.set(query2.name, fromProtoNamedQuery(query2));
     return PersistencePromise.resolve();
   }
 };
@@ -29173,16 +29176,16 @@ var MemoryDocumentOverlayCache = class {
     }
     return PersistencePromise.resolve();
   }
-  getOverlaysForCollection(transaction, collection5, sinceBatchId) {
+  getOverlaysForCollection(transaction, collection2, sinceBatchId) {
     const result = newOverlayMap();
-    const immediateChildrenPathLength = collection5.length + 1;
-    const prefix = new DocumentKey(collection5.child(""));
+    const immediateChildrenPathLength = collection2.length + 1;
+    const prefix = new DocumentKey(collection2.child(""));
     const iter = this.overlays.getIteratorFrom(prefix);
     while (iter.hasNext()) {
       const entry = iter.getNext();
       const overlay = entry.value;
       const key = overlay.getKey();
-      if (!collection5.isPrefixOf(key.path)) {
+      if (!collection2.isPrefixOf(key.path)) {
         break;
       }
       if (key.path.length !== immediateChildrenPathLength) {
@@ -29382,8 +29385,8 @@ var MemoryMutationQueue = class {
     });
     return PersistencePromise.resolve(this.findMutationBatches(uniqueBatchIDs));
   }
-  getAllMutationBatchesAffectingQuery(transaction, query6) {
-    const prefix = query6.path;
+  getAllMutationBatchesAffectingQuery(transaction, query2) {
+    const prefix = query2.path;
     const immediateChildrenPathLength = prefix.length + 1;
     let startPath = prefix;
     if (!DocumentKey.isDocumentKey(startPath)) {
@@ -29540,9 +29543,9 @@ var MemoryRemoteDocumentCacheImpl = class {
     });
     return PersistencePromise.resolve(results);
   }
-  getDocumentsMatchingQuery(transaction, query6, offset, mutatedDocs) {
+  getDocumentsMatchingQuery(transaction, query2, offset, mutatedDocs) {
     let results = mutableDocumentMap();
-    const collectionPath = query6.path;
+    const collectionPath = query2.path;
     const prefix = new DocumentKey(collectionPath.child(""));
     const iterator = this.docs.getIteratorFrom(prefix);
     while (iterator.hasNext()) {
@@ -29556,7 +29559,7 @@ var MemoryRemoteDocumentCacheImpl = class {
       if (indexOffsetComparator(newIndexOffsetFromDocument(document2), offset) <= 0) {
         continue;
       }
-      if (!mutatedDocs.has(document2.key) && !queryMatches(query6, document2)) {
+      if (!mutatedDocs.has(document2.key) && !queryMatches(query2, document2)) {
         continue;
       }
       results = results.insert(document2.key, document2.mutableCopy());
@@ -30190,7 +30193,7 @@ function localStoreReleaseTarget(localStore, targetId, keepPersistedTargetData) 
     localStoreImpl.targetIdByTarget.delete(targetData.target);
   });
 }
-function localStoreExecuteQuery(localStore, query6, usePreviousResults) {
+function localStoreExecuteQuery(localStore, query2, usePreviousResults) {
   const localStoreImpl = debugCast(localStore);
   let lastLimboFreeSnapshotVersion = SnapshotVersion.min();
   let remoteKeys = documentKeySet();
@@ -30200,15 +30203,15 @@ function localStoreExecuteQuery(localStore, query6, usePreviousResults) {
     // Use readwrite instead of readonly so indexes can be created
     // Use readwrite instead of readonly so indexes can be created
     (txn) => {
-      return localStoreGetTargetData(localStoreImpl, txn, queryToTarget(query6)).next((targetData) => {
+      return localStoreGetTargetData(localStoreImpl, txn, queryToTarget(query2)).next((targetData) => {
         if (targetData) {
           lastLimboFreeSnapshotVersion = targetData.lastLimboFreeSnapshotVersion;
           return localStoreImpl.targetCache.getMatchingKeysForTargetId(txn, targetData.targetId).next((result) => {
             remoteKeys = result;
           });
         }
-      }).next(() => localStoreImpl.queryEngine.getDocumentsMatchingQuery(txn, query6, usePreviousResults ? lastLimboFreeSnapshotVersion : SnapshotVersion.min(), usePreviousResults ? remoteKeys : documentKeySet())).next((documents) => {
-        setMaxReadTime(localStoreImpl, queryCollectionGroup(query6), documents);
+      }).next(() => localStoreImpl.queryEngine.getDocumentsMatchingQuery(txn, query2, usePreviousResults ? lastLimboFreeSnapshotVersion : SnapshotVersion.min(), usePreviousResults ? remoteKeys : documentKeySet())).next((documents) => {
+        setMaxReadTime(localStoreImpl, queryCollectionGroup(query2), documents);
         return { documents, remoteKeys };
       });
     }
@@ -30277,15 +30280,15 @@ var QueryEngine = class {
     this.initialized = true;
   }
   /** Returns all local documents matching the specified query. */
-  getDocumentsMatchingQuery(transaction, query6, lastLimboFreeSnapshotVersion, remoteKeys) {
+  getDocumentsMatchingQuery(transaction, query2, lastLimboFreeSnapshotVersion, remoteKeys) {
     const queryResult = { result: null };
-    return this.performQueryUsingIndex(transaction, query6).next((result) => {
+    return this.performQueryUsingIndex(transaction, query2).next((result) => {
       queryResult.result = result;
     }).next(() => {
       if (queryResult.result) {
         return;
       }
-      return this.performQueryUsingRemoteKeys(transaction, query6, remoteKeys, lastLimboFreeSnapshotVersion).next((result) => {
+      return this.performQueryUsingRemoteKeys(transaction, query2, remoteKeys, lastLimboFreeSnapshotVersion).next((result) => {
         queryResult.result = result;
       });
     }).next(() => {
@@ -30293,29 +30296,29 @@ var QueryEngine = class {
         return;
       }
       const context = new QueryContext();
-      return this.executeFullCollectionScan(transaction, query6, context).next((result) => {
+      return this.executeFullCollectionScan(transaction, query2, context).next((result) => {
         queryResult.result = result;
         if (this.indexAutoCreationEnabled) {
-          return this.createCacheIndexes(transaction, query6, context, result.size);
+          return this.createCacheIndexes(transaction, query2, context, result.size);
         }
       });
     }).next(() => queryResult.result);
   }
-  createCacheIndexes(transaction, query6, context, resultSize) {
+  createCacheIndexes(transaction, query2, context, resultSize) {
     if (context.documentReadCount < this.indexAutoCreationMinCollectionSize) {
       if (getLogLevel() <= LogLevel.DEBUG) {
-        logDebug("QueryEngine", "SDK will not create cache indexes for query:", stringifyQuery(query6), "since it only creates cache indexes for collection contains", "more than or equal to", this.indexAutoCreationMinCollectionSize, "documents");
+        logDebug("QueryEngine", "SDK will not create cache indexes for query:", stringifyQuery(query2), "since it only creates cache indexes for collection contains", "more than or equal to", this.indexAutoCreationMinCollectionSize, "documents");
       }
       return PersistencePromise.resolve();
     }
     if (getLogLevel() <= LogLevel.DEBUG) {
-      logDebug("QueryEngine", "Query:", stringifyQuery(query6), "scans", context.documentReadCount, "local documents and returns", resultSize, "documents as results.");
+      logDebug("QueryEngine", "Query:", stringifyQuery(query2), "scans", context.documentReadCount, "local documents and returns", resultSize, "documents as results.");
     }
     if (context.documentReadCount > this.relativeIndexReadCostPerDocument * resultSize) {
       if (getLogLevel() <= LogLevel.DEBUG) {
-        logDebug("QueryEngine", "The SDK decides to create cache indexes for query:", stringifyQuery(query6), "as using cache indexes may help improve performance.");
+        logDebug("QueryEngine", "The SDK decides to create cache indexes for query:", stringifyQuery(query2), "as using cache indexes may help improve performance.");
       }
-      return this.indexManager.createTargetIndexes(transaction, queryToTarget(query6));
+      return this.indexManager.createTargetIndexes(transaction, queryToTarget(query2));
     }
     return PersistencePromise.resolve();
   }
@@ -30323,38 +30326,38 @@ var QueryEngine = class {
    * Performs an indexed query that evaluates the query based on a collection's
    * persisted index values. Returns `null` if an index is not available.
    */
-  performQueryUsingIndex(transaction, query6) {
-    if (queryMatchesAllDocuments(query6)) {
+  performQueryUsingIndex(transaction, query2) {
+    if (queryMatchesAllDocuments(query2)) {
       return PersistencePromise.resolve(null);
     }
-    let target = queryToTarget(query6);
+    let target = queryToTarget(query2);
     return this.indexManager.getIndexType(transaction, target).next((indexType) => {
       if (indexType === 0) {
         return null;
       }
-      if (query6.limit !== null && indexType === 1) {
-        query6 = queryWithLimit(
-          query6,
+      if (query2.limit !== null && indexType === 1) {
+        query2 = queryWithLimit(
+          query2,
           null,
           "F"
           /* LimitType.First */
         );
-        target = queryToTarget(query6);
+        target = queryToTarget(query2);
       }
       return this.indexManager.getDocumentsMatchingTarget(transaction, target).next((keys) => {
         const sortedKeys = documentKeySet(...keys);
         return this.localDocumentsView.getDocuments(transaction, sortedKeys).next((indexedDocuments) => {
           return this.indexManager.getMinOffset(transaction, target).next((offset) => {
-            const previousResults = this.applyQuery(query6, indexedDocuments);
-            if (this.needsRefill(query6, previousResults, sortedKeys, offset.readTime)) {
+            const previousResults = this.applyQuery(query2, indexedDocuments);
+            if (this.needsRefill(query2, previousResults, sortedKeys, offset.readTime)) {
               return this.performQueryUsingIndex(transaction, queryWithLimit(
-                query6,
+                query2,
                 null,
                 "F"
                 /* LimitType.First */
               ));
             }
-            return this.appendRemainingResults(transaction, previousResults, query6, offset);
+            return this.appendRemainingResults(transaction, previousResults, query2, offset);
           });
         });
       });
@@ -30364,29 +30367,29 @@ var QueryEngine = class {
    * Performs a query based on the target's persisted query mapping. Returns
    * `null` if the mapping is not available or cannot be used.
    */
-  performQueryUsingRemoteKeys(transaction, query6, remoteKeys, lastLimboFreeSnapshotVersion) {
-    if (queryMatchesAllDocuments(query6)) {
+  performQueryUsingRemoteKeys(transaction, query2, remoteKeys, lastLimboFreeSnapshotVersion) {
+    if (queryMatchesAllDocuments(query2)) {
       return PersistencePromise.resolve(null);
     }
     if (lastLimboFreeSnapshotVersion.isEqual(SnapshotVersion.min())) {
       return PersistencePromise.resolve(null);
     }
     return this.localDocumentsView.getDocuments(transaction, remoteKeys).next((documents) => {
-      const previousResults = this.applyQuery(query6, documents);
-      if (this.needsRefill(query6, previousResults, remoteKeys, lastLimboFreeSnapshotVersion)) {
+      const previousResults = this.applyQuery(query2, documents);
+      if (this.needsRefill(query2, previousResults, remoteKeys, lastLimboFreeSnapshotVersion)) {
         return PersistencePromise.resolve(null);
       }
       if (getLogLevel() <= LogLevel.DEBUG) {
-        logDebug("QueryEngine", "Re-using previous result from %s to execute query: %s", lastLimboFreeSnapshotVersion.toString(), stringifyQuery(query6));
+        logDebug("QueryEngine", "Re-using previous result from %s to execute query: %s", lastLimboFreeSnapshotVersion.toString(), stringifyQuery(query2));
       }
-      return this.appendRemainingResults(transaction, previousResults, query6, newIndexOffsetSuccessorFromReadTime(lastLimboFreeSnapshotVersion, INITIAL_LARGEST_BATCH_ID)).next((results) => results);
+      return this.appendRemainingResults(transaction, previousResults, query2, newIndexOffsetSuccessorFromReadTime(lastLimboFreeSnapshotVersion, INITIAL_LARGEST_BATCH_ID)).next((results) => results);
     });
   }
   /** Applies the query filter and sorting to the provided documents.  */
-  applyQuery(query6, documents) {
-    let queryResults = new SortedSet(newQueryComparator(query6));
+  applyQuery(query2, documents) {
+    let queryResults = new SortedSet(newQueryComparator(query2));
     documents.forEach((_, maybeDoc) => {
-      if (queryMatches(query6, maybeDoc)) {
+      if (queryMatches(query2, maybeDoc)) {
         queryResults = queryResults.add(maybeDoc);
       }
     });
@@ -30404,31 +30407,31 @@ var QueryEngine = class {
    * @param limboFreeSnapshotVersion - The version of the snapshot when the
    * query was last synchronized.
    */
-  needsRefill(query6, sortedPreviousResults, remoteKeys, limboFreeSnapshotVersion) {
-    if (query6.limit === null) {
+  needsRefill(query2, sortedPreviousResults, remoteKeys, limboFreeSnapshotVersion) {
+    if (query2.limit === null) {
       return false;
     }
     if (remoteKeys.size !== sortedPreviousResults.size) {
       return true;
     }
-    const docAtLimitEdge = query6.limitType === "F" ? sortedPreviousResults.last() : sortedPreviousResults.first();
+    const docAtLimitEdge = query2.limitType === "F" ? sortedPreviousResults.last() : sortedPreviousResults.first();
     if (!docAtLimitEdge) {
       return false;
     }
     return docAtLimitEdge.hasPendingWrites || docAtLimitEdge.version.compareTo(limboFreeSnapshotVersion) > 0;
   }
-  executeFullCollectionScan(transaction, query6, context) {
+  executeFullCollectionScan(transaction, query2, context) {
     if (getLogLevel() <= LogLevel.DEBUG) {
-      logDebug("QueryEngine", "Using full collection scan to execute query:", stringifyQuery(query6));
+      logDebug("QueryEngine", "Using full collection scan to execute query:", stringifyQuery(query2));
     }
-    return this.localDocumentsView.getDocumentsMatchingQuery(transaction, query6, IndexOffset.min(), context);
+    return this.localDocumentsView.getDocumentsMatchingQuery(transaction, query2, IndexOffset.min(), context);
   }
   /**
    * Combines the results from an indexed execution with the remaining documents
    * that have not yet been indexed.
    */
-  appendRemainingResults(transaction, indexedResults, query6, offset) {
-    return this.localDocumentsView.getDocumentsMatchingQuery(transaction, query6, offset).next((remainingResults) => {
+  appendRemainingResults(transaction, indexedResults, query2, offset) {
+    return this.localDocumentsView.getDocumentsMatchingQuery(transaction, query2, offset).next((remainingResults) => {
       indexedResults.forEach((d) => {
         remainingResults = remainingResults.insert(d.key, d);
       });
@@ -34953,8 +34956,8 @@ var DocumentChangeSet = class {
   }
 };
 var ViewSnapshot = class _ViewSnapshot {
-  constructor(query6, docs, oldDocs, docChanges, mutatedKeys, fromCache, syncStateChanged, excludesMetadataChanges, hasCachedResults) {
-    this.query = query6;
+  constructor(query2, docs, oldDocs, docChanges, mutatedKeys, fromCache, syncStateChanged, excludesMetadataChanges, hasCachedResults) {
+    this.query = query2;
     this.docs = docs;
     this.oldDocs = oldDocs;
     this.docChanges = docChanges;
@@ -34965,13 +34968,13 @@ var ViewSnapshot = class _ViewSnapshot {
     this.hasCachedResults = hasCachedResults;
   }
   /** Returns a view snapshot as if all documents in the snapshot were added. */
-  static fromInitialDocuments(query6, documents, mutatedKeys, fromCache, hasCachedResults) {
+  static fromInitialDocuments(query2, documents, mutatedKeys, fromCache, hasCachedResults) {
     const changes = [];
     documents.forEach((doc2) => {
       changes.push({ type: 0, doc: doc2 });
     });
     return new _ViewSnapshot(
-      query6,
+      query2,
       documents,
       DocumentSet.emptySet(documents),
       changes,
@@ -35028,8 +35031,8 @@ function eventManagerListen(eventManager, listener) {
   return __async(this, null, function* () {
     const eventManagerImpl = debugCast(eventManager);
     let listenerAction = 3;
-    const query6 = listener.query;
-    let queryInfo = eventManagerImpl.queries.get(query6);
+    const query2 = listener.query;
+    let queryInfo = eventManagerImpl.queries.get(query2);
     if (!queryInfo) {
       queryInfo = new QueryListenersInfo();
       listenerAction = listener.listensToRemoteStore() ? 0 : 1;
@@ -35040,20 +35043,20 @@ function eventManagerListen(eventManager, listener) {
       switch (listenerAction) {
         case 0:
           queryInfo.viewSnap = yield eventManagerImpl.onListen(
-            query6,
+            query2,
             /** enableRemoteListen= */
             true
           );
           break;
         case 1:
           queryInfo.viewSnap = yield eventManagerImpl.onListen(
-            query6,
+            query2,
             /** enableRemoteListen= */
             false
           );
           break;
         case 2:
-          yield eventManagerImpl.onFirstRemoteStoreListen(query6);
+          yield eventManagerImpl.onFirstRemoteStoreListen(query2);
           break;
         default:
           break;
@@ -35063,7 +35066,7 @@ function eventManagerListen(eventManager, listener) {
       listener.onError(firestoreError);
       return;
     }
-    eventManagerImpl.queries.set(query6, queryInfo);
+    eventManagerImpl.queries.set(query2, queryInfo);
     queryInfo.listeners.push(listener);
     listener.applyOnlineStateChange(eventManagerImpl.onlineState);
     if (queryInfo.viewSnap) {
@@ -35077,9 +35080,9 @@ function eventManagerListen(eventManager, listener) {
 function eventManagerUnlisten(eventManager, listener) {
   return __async(this, null, function* () {
     const eventManagerImpl = debugCast(eventManager);
-    const query6 = listener.query;
+    const query2 = listener.query;
     let listenerAction = 3;
-    const queryInfo = eventManagerImpl.queries.get(query6);
+    const queryInfo = eventManagerImpl.queries.get(query2);
     if (queryInfo) {
       const i = queryInfo.listeners.indexOf(listener);
       if (i >= 0) {
@@ -35093,21 +35096,21 @@ function eventManagerUnlisten(eventManager, listener) {
     }
     switch (listenerAction) {
       case 0:
-        eventManagerImpl.queries.delete(query6);
+        eventManagerImpl.queries.delete(query2);
         return eventManagerImpl.onUnlisten(
-          query6,
+          query2,
           /** disableRemoteListen= */
           true
         );
       case 1:
-        eventManagerImpl.queries.delete(query6);
+        eventManagerImpl.queries.delete(query2);
         return eventManagerImpl.onUnlisten(
-          query6,
+          query2,
           /** disableRemoteListen= */
           false
         );
       case 2:
-        return eventManagerImpl.onLastRemoteStoreUnlisten(query6);
+        return eventManagerImpl.onLastRemoteStoreUnlisten(query2);
       default:
         return;
     }
@@ -35117,8 +35120,8 @@ function eventManagerOnWatchChange(eventManager, viewSnaps) {
   const eventManagerImpl = debugCast(eventManager);
   let raisedEvent = false;
   for (const viewSnap of viewSnaps) {
-    const query6 = viewSnap.query;
-    const queryInfo = eventManagerImpl.queries.get(query6);
+    const query2 = viewSnap.query;
+    const queryInfo = eventManagerImpl.queries.get(query2);
     if (queryInfo) {
       for (const listener of queryInfo.listeners) {
         if (listener.onViewSnapshot(viewSnap)) {
@@ -35132,15 +35135,15 @@ function eventManagerOnWatchChange(eventManager, viewSnaps) {
     raiseSnapshotsInSyncEvent(eventManagerImpl);
   }
 }
-function eventManagerOnWatchError(eventManager, query6, error) {
+function eventManagerOnWatchError(eventManager, query2, error) {
   const eventManagerImpl = debugCast(eventManager);
-  const queryInfo = eventManagerImpl.queries.get(query6);
+  const queryInfo = eventManagerImpl.queries.get(query2);
   if (queryInfo) {
     for (const listener of queryInfo.listeners) {
       listener.onError(error);
     }
   }
-  eventManagerImpl.queries.delete(query6);
+  eventManagerImpl.queries.delete(query2);
 }
 function eventManagerOnOnlineStateChange(eventManager, onlineState) {
   const eventManagerImpl = debugCast(eventManager);
@@ -35168,8 +35171,8 @@ var ListenerDataSource;
   ListenerDataSource2["Cache"] = "cache";
 })(ListenerDataSource || (ListenerDataSource = {}));
 var QueryListener = class {
-  constructor(query6, queryObserver, options) {
-    this.query = query6;
+  constructor(query2, queryObserver, options) {
+    this.query = query2;
     this.queryObserver = queryObserver;
     this.raisedInitialEvent = false;
     this.snap = null;
@@ -35295,15 +35298,15 @@ var RemovedLimboDocument = class {
   }
 };
 var View = class {
-  constructor(query6, _syncedDocuments) {
-    this.query = query6;
+  constructor(query2, _syncedDocuments) {
+    this.query = query2;
     this._syncedDocuments = _syncedDocuments;
     this.syncState = null;
     this.hasCachedResults = false;
     this.current = false;
     this.limboDocuments = documentKeySet();
     this.mutatedKeys = documentKeySet();
-    this.docComparator = newQueryComparator(query6);
+    this.docComparator = newQueryComparator(query2);
     this.documentSet = new DocumentSet(this.docComparator);
   }
   /**
@@ -35580,8 +35583,8 @@ function compareChangeType(c1, c2) {
 }
 var LOG_TAG$3 = "SyncEngine";
 var QueryView = class {
-  constructor(query6, targetId, view) {
-    this.query = query6;
+  constructor(query2, targetId, view) {
+    this.query = query2;
     this.targetId = targetId;
     this.view = view;
   }
@@ -35624,18 +35627,18 @@ function newSyncEngine(localStore, remoteStore, eventManager, sharedClientState,
   }
   return syncEngine;
 }
-function syncEngineListen(syncEngine, query6, shouldListenToRemote = true) {
+function syncEngineListen(syncEngine, query2, shouldListenToRemote = true) {
   return __async(this, null, function* () {
     const syncEngineImpl = ensureWatchCallbacks(syncEngine);
     let viewSnapshot;
-    const queryView = syncEngineImpl.queryViewsByQuery.get(query6);
+    const queryView = syncEngineImpl.queryViewsByQuery.get(query2);
     if (queryView) {
       syncEngineImpl.sharedClientState.addLocalQueryTarget(queryView.targetId);
       viewSnapshot = queryView.view.computeInitialSnapshot();
     } else {
       viewSnapshot = yield allocateTargetAndMaybeListen(
         syncEngineImpl,
-        query6,
+        query2,
         shouldListenToRemote,
         /** shouldInitializeView= */
         true
@@ -35644,12 +35647,12 @@ function syncEngineListen(syncEngine, query6, shouldListenToRemote = true) {
     return viewSnapshot;
   });
 }
-function triggerRemoteStoreListen(syncEngine, query6) {
+function triggerRemoteStoreListen(syncEngine, query2) {
   return __async(this, null, function* () {
     const syncEngineImpl = ensureWatchCallbacks(syncEngine);
     yield allocateTargetAndMaybeListen(
       syncEngineImpl,
-      query6,
+      query2,
       /** shouldListenToRemote= */
       true,
       /** shouldInitializeView= */
@@ -35657,14 +35660,14 @@ function triggerRemoteStoreListen(syncEngine, query6) {
     );
   });
 }
-function allocateTargetAndMaybeListen(syncEngineImpl, query6, shouldListenToRemote, shouldInitializeView) {
+function allocateTargetAndMaybeListen(syncEngineImpl, query2, shouldListenToRemote, shouldInitializeView) {
   return __async(this, null, function* () {
-    const targetData = yield localStoreAllocateTarget(syncEngineImpl.localStore, queryToTarget(query6));
+    const targetData = yield localStoreAllocateTarget(syncEngineImpl.localStore, queryToTarget(query2));
     const targetId = targetData.targetId;
     const status = shouldListenToRemote ? syncEngineImpl.sharedClientState.addLocalQueryTarget(targetId) : "not-current";
     let viewSnapshot;
     if (shouldInitializeView) {
-      viewSnapshot = yield initializeViewAndComputeSnapshot(syncEngineImpl, query6, targetId, status === "current", targetData.resumeToken);
+      viewSnapshot = yield initializeViewAndComputeSnapshot(syncEngineImpl, query2, targetId, status === "current", targetData.resumeToken);
     }
     if (syncEngineImpl.isPrimaryClient && shouldListenToRemote) {
       remoteStoreListen(syncEngineImpl.remoteStore, targetData);
@@ -35672,16 +35675,16 @@ function allocateTargetAndMaybeListen(syncEngineImpl, query6, shouldListenToRemo
     return viewSnapshot;
   });
 }
-function initializeViewAndComputeSnapshot(syncEngineImpl, query6, targetId, current, resumeToken) {
+function initializeViewAndComputeSnapshot(syncEngineImpl, query2, targetId, current, resumeToken) {
   return __async(this, null, function* () {
     syncEngineImpl.applyDocChanges = (queryView, changes, remoteEvent) => applyDocChanges(syncEngineImpl, queryView, changes, remoteEvent);
     const queryResult = yield localStoreExecuteQuery(
       syncEngineImpl.localStore,
-      query6,
+      query2,
       /* usePreviousResults= */
       true
     );
-    const view = new View(query6, queryResult.remoteKeys);
+    const view = new View(query2, queryResult.remoteKeys);
     const viewDocChanges = view.computeDocChanges(queryResult.documents);
     const synthesizedTargetChange = TargetChange.createSynthesizedTargetChangeForCurrentChange(targetId, current && syncEngineImpl.onlineState !== "Offline", resumeToken);
     const viewChange = view.applyChanges(
@@ -35691,24 +35694,24 @@ function initializeViewAndComputeSnapshot(syncEngineImpl, query6, targetId, curr
       synthesizedTargetChange
     );
     updateTrackedLimbos(syncEngineImpl, targetId, viewChange.limboChanges);
-    const data = new QueryView(query6, targetId, view);
-    syncEngineImpl.queryViewsByQuery.set(query6, data);
+    const data = new QueryView(query2, targetId, view);
+    syncEngineImpl.queryViewsByQuery.set(query2, data);
     if (syncEngineImpl.queriesByTarget.has(targetId)) {
-      syncEngineImpl.queriesByTarget.get(targetId).push(query6);
+      syncEngineImpl.queriesByTarget.get(targetId).push(query2);
     } else {
-      syncEngineImpl.queriesByTarget.set(targetId, [query6]);
+      syncEngineImpl.queriesByTarget.set(targetId, [query2]);
     }
     return viewChange.snapshot;
   });
 }
-function syncEngineUnlisten(syncEngine, query6, shouldUnlistenToRemote) {
+function syncEngineUnlisten(syncEngine, query2, shouldUnlistenToRemote) {
   return __async(this, null, function* () {
     const syncEngineImpl = debugCast(syncEngine);
-    const queryView = syncEngineImpl.queryViewsByQuery.get(query6);
+    const queryView = syncEngineImpl.queryViewsByQuery.get(query2);
     const queries = syncEngineImpl.queriesByTarget.get(queryView.targetId);
     if (queries.length > 1) {
-      syncEngineImpl.queriesByTarget.set(queryView.targetId, queries.filter((q2) => !queryEquals(q2, query6)));
-      syncEngineImpl.queryViewsByQuery.delete(query6);
+      syncEngineImpl.queriesByTarget.set(queryView.targetId, queries.filter((q2) => !queryEquals(q2, query2)));
+      syncEngineImpl.queryViewsByQuery.delete(query2);
       return;
     }
     if (syncEngineImpl.isPrimaryClient) {
@@ -35739,10 +35742,10 @@ function syncEngineUnlisten(syncEngine, query6, shouldUnlistenToRemote) {
     }
   });
 }
-function triggerRemoteStoreUnlisten(syncEngine, query6) {
+function triggerRemoteStoreUnlisten(syncEngine, query2) {
   return __async(this, null, function* () {
     const syncEngineImpl = debugCast(syncEngine);
-    const queryView = syncEngineImpl.queryViewsByQuery.get(query6);
+    const queryView = syncEngineImpl.queryViewsByQuery.get(query2);
     const queries = syncEngineImpl.queriesByTarget.get(queryView.targetId);
     if (syncEngineImpl.isPrimaryClient && queries.length === 1) {
       syncEngineImpl.sharedClientState.removeLocalQueryTarget(queryView.targetId);
@@ -35795,7 +35798,7 @@ function syncEngineApplyOnlineStateChange(syncEngine, onlineState, source) {
   const syncEngineImpl = debugCast(syncEngine);
   if (syncEngineImpl.isPrimaryClient && source === 0 || !syncEngineImpl.isPrimaryClient && source === 1) {
     const newViewSnapshots = [];
-    syncEngineImpl.queryViewsByQuery.forEach((query6, queryView) => {
+    syncEngineImpl.queryViewsByQuery.forEach((query2, queryView) => {
       const viewChange = queryView.view.applyOnlineStateChange(onlineState);
       if (viewChange.snapshot) {
         newViewSnapshots.push(viewChange.snapshot);
@@ -35918,10 +35921,10 @@ function processUserCallback(syncEngine, batchId, error) {
 }
 function removeAndCleanupTarget(syncEngineImpl, targetId, error = null) {
   syncEngineImpl.sharedClientState.removeLocalQueryTarget(targetId);
-  for (const query6 of syncEngineImpl.queriesByTarget.get(targetId)) {
-    syncEngineImpl.queryViewsByQuery.delete(query6);
+  for (const query2 of syncEngineImpl.queriesByTarget.get(targetId)) {
+    syncEngineImpl.queryViewsByQuery.delete(query2);
     if (error) {
-      syncEngineImpl.syncEngineListener.onWatchError(query6, error);
+      syncEngineImpl.syncEngineListener.onWatchError(query2, error);
     }
   }
   syncEngineImpl.queriesByTarget.delete(targetId);
@@ -36062,8 +36065,8 @@ function syncEngineGetRemoteKeysForTarget(syncEngine, targetId) {
     if (!queries) {
       return keySet;
     }
-    for (const query6 of queries) {
-      const queryView = syncEngineImpl.queryViewsByQuery.get(query6);
+    for (const query2 of queries) {
+      const queryView = syncEngineImpl.queryViewsByQuery.get(query2);
       keySet = keySet.unionWith(queryView.view.syncedDocuments);
     }
     return keySet;
@@ -36637,11 +36640,11 @@ function firestoreClientGetDocumentViaSnapshotListener(client, key, options = {}
   }));
   return deferred.promise;
 }
-function firestoreClientGetDocumentsViaSnapshotListener(client, query6, options = {}) {
+function firestoreClientGetDocumentsViaSnapshotListener(client, query2, options = {}) {
   const deferred = new Deferred2();
   client.asyncQueue.enqueueAndForget(() => __async(this, null, function* () {
     const eventManager = yield getEventManager(client);
-    return executeQueryViaSnapshotListener(eventManager, client.asyncQueue, query6, options, deferred);
+    return executeQueryViaSnapshotListener(eventManager, client.asyncQueue, query2, options, deferred);
   }));
   return deferred.promise;
 }
@@ -36682,7 +36685,7 @@ function readDocumentViaSnapshotListener(eventManager, asyncQueue, key, options,
   });
   return eventManagerListen(eventManager, listener);
 }
-function executeQueryViaSnapshotListener(eventManager, asyncQueue, query6, options, result) {
+function executeQueryViaSnapshotListener(eventManager, asyncQueue, query2, options, result) {
   const wrappedObserver = new AsyncObserver({
     next: (snapshot) => {
       asyncQueue.enqueueAndForget(() => eventManagerUnlisten(eventManager, listener));
@@ -36694,7 +36697,7 @@ function executeQueryViaSnapshotListener(eventManager, asyncQueue, query6, optio
     },
     error: (e) => result.reject(e)
   });
-  const listener = new QueryListener(query6, wrappedObserver, {
+  const listener = new QueryListener(query2, wrappedObserver, {
     includeMetadataChanges: true,
     waitForSyncWhenOnline: true
   });
@@ -37949,8 +37952,8 @@ function fieldPathFromArgument(methodName, arg) {
     return arg._delegate._internalPath;
   }
 }
-function validateHasExplicitOrderByForLimitToLast(query6) {
-  if (query6.limitType === "L" && query6.explicitOrderBy.length === 0) {
+function validateHasExplicitOrderByForLimitToLast(query2) {
+  if (query2.limitType === "L" && query2.explicitOrderBy.length === 0) {
     throw new FirestoreError(Code.UNIMPLEMENTED, "limitToLast() queries require specifying at least one orderBy() clause");
   }
 }
@@ -37958,7 +37961,7 @@ var AppliableConstraint = class {
 };
 var QueryConstraint = class extends AppliableConstraint {
 };
-function query(query6, queryConstraint, ...additionalQueryConstraints) {
+function query(query2, queryConstraint, ...additionalQueryConstraints) {
   let queryConstraints = [];
   if (queryConstraint instanceof AppliableConstraint) {
     queryConstraints.push(queryConstraint);
@@ -37966,9 +37969,9 @@ function query(query6, queryConstraint, ...additionalQueryConstraints) {
   queryConstraints = queryConstraints.concat(additionalQueryConstraints);
   validateQueryConstraintArray(queryConstraints);
   for (const constraint of queryConstraints) {
-    query6 = constraint._apply(query6);
+    query2 = constraint._apply(query2);
   }
-  return query6;
+  return query2;
 }
 var QueryFieldFilterConstraint = class _QueryFieldFilterConstraint extends QueryConstraint {
   /**
@@ -37984,14 +37987,14 @@ var QueryFieldFilterConstraint = class _QueryFieldFilterConstraint extends Query
   static _create(_field, _op, _value) {
     return new _QueryFieldFilterConstraint(_field, _op, _value);
   }
-  _apply(query6) {
-    const filter = this._parse(query6);
-    validateNewFieldFilter(query6._query, filter);
-    return new Query(query6.firestore, query6.converter, queryWithAddedFilter(query6._query, filter));
+  _apply(query2) {
+    const filter = this._parse(query2);
+    validateNewFieldFilter(query2._query, filter);
+    return new Query(query2.firestore, query2.converter, queryWithAddedFilter(query2._query, filter));
   }
-  _parse(query6) {
-    const reader = newUserDataReader(query6.firestore);
-    const filter = newQueryFilter(query6._query, "where", reader, query6.firestore._databaseId, this._field, this._op, this._value);
+  _parse(query2) {
+    const reader = newUserDataReader(query2.firestore);
+    const filter = newQueryFilter(query2._query, "where", reader, query2.firestore._databaseId, this._field, this._op, this._value);
     return filter;
   }
 };
@@ -38012,22 +38015,22 @@ var QueryCompositeFilterConstraint = class _QueryCompositeFilterConstraint exten
   static _create(type, _queryConstraints) {
     return new _QueryCompositeFilterConstraint(type, _queryConstraints);
   }
-  _parse(query6) {
+  _parse(query2) {
     const parsedFilters = this._queryConstraints.map((queryConstraint) => {
-      return queryConstraint._parse(query6);
+      return queryConstraint._parse(query2);
     }).filter((parsedFilter) => parsedFilter.getFilters().length > 0);
     if (parsedFilters.length === 1) {
       return parsedFilters[0];
     }
     return CompositeFilter.create(parsedFilters, this._getOperator());
   }
-  _apply(query6) {
-    const parsedFilter = this._parse(query6);
+  _apply(query2) {
+    const parsedFilter = this._parse(query2);
     if (parsedFilter.getFilters().length === 0) {
-      return query6;
+      return query2;
     }
-    validateNewFilter(query6._query, parsedFilter);
-    return new Query(query6.firestore, query6.converter, queryWithAddedFilter(query6._query, parsedFilter));
+    validateNewFilter(query2._query, parsedFilter);
+    return new Query(query2.firestore, query2.converter, queryWithAddedFilter(query2._query, parsedFilter));
   }
   _getQueryConstraints() {
     return this._queryConstraints;
@@ -38036,7 +38039,7 @@ var QueryCompositeFilterConstraint = class _QueryCompositeFilterConstraint exten
     return this.type === "and" ? "and" : "or";
   }
 };
-function newQueryFilter(query6, methodName, dataReader, databaseId, fieldPath, op, value) {
+function newQueryFilter(query2, methodName, dataReader, databaseId, fieldPath, op, value) {
   let fieldValue;
   if (fieldPath.isKeyField()) {
     if (op === "array-contains" || op === "array-contains-any") {
@@ -38045,11 +38048,11 @@ function newQueryFilter(query6, methodName, dataReader, databaseId, fieldPath, o
       validateDisjunctiveFilterElements(value, op);
       const referenceList = [];
       for (const arrayValue of value) {
-        referenceList.push(parseDocumentIdValue(databaseId, query6, arrayValue));
+        referenceList.push(parseDocumentIdValue(databaseId, query2, arrayValue));
       }
       fieldValue = { arrayValue: { values: referenceList } };
     } else {
-      fieldValue = parseDocumentIdValue(databaseId, query6, value);
+      fieldValue = parseDocumentIdValue(databaseId, query2, value);
     }
   } else {
     if (op === "in" || op === "not-in" || op === "array-contains-any") {
@@ -38067,16 +38070,16 @@ function newQueryFilter(query6, methodName, dataReader, databaseId, fieldPath, o
   const filter = FieldFilter.create(fieldPath, op, fieldValue);
   return filter;
 }
-function parseDocumentIdValue(databaseId, query6, documentIdValue) {
+function parseDocumentIdValue(databaseId, query2, documentIdValue) {
   documentIdValue = getModularInstance(documentIdValue);
   if (typeof documentIdValue === "string") {
     if (documentIdValue === "") {
       throw new FirestoreError(Code.INVALID_ARGUMENT, "Invalid query. When querying with documentId(), you must provide a valid document ID, but it was an empty string.");
     }
-    if (!isCollectionGroupQuery(query6) && documentIdValue.indexOf("/") !== -1) {
+    if (!isCollectionGroupQuery(query2) && documentIdValue.indexOf("/") !== -1) {
       throw new FirestoreError(Code.INVALID_ARGUMENT, `Invalid query. When querying a collection by documentId(), you must provide a plain document ID, but '${documentIdValue}' contains a '/' character.`);
     }
-    const path = query6.path.child(ResourcePath.fromString(documentIdValue));
+    const path = query2.path.child(ResourcePath.fromString(documentIdValue));
     if (!DocumentKey.isDocumentKey(path)) {
       throw new FirestoreError(Code.INVALID_ARGUMENT, `Invalid query. When querying a collection group by documentId(), the value provided must result in a valid document path, but '${path}' is not because it has an odd number of segments (${path.length}).`);
     }
@@ -38118,8 +38121,8 @@ function conflictingOps(op) {
       return [];
   }
 }
-function validateNewFieldFilter(query6, fieldFilter) {
-  const conflictingOp = findOpInsideFilters(query6.filters, conflictingOps(fieldFilter.op));
+function validateNewFieldFilter(query2, fieldFilter) {
+  const conflictingOp = findOpInsideFilters(query2.filters, conflictingOps(fieldFilter.op));
   if (conflictingOp !== null) {
     if (conflictingOp === fieldFilter.op) {
       throw new FirestoreError(Code.INVALID_ARGUMENT, `Invalid query. You cannot use more than one '${fieldFilter.op.toString()}' filter.`);
@@ -38128,8 +38131,8 @@ function validateNewFieldFilter(query6, fieldFilter) {
     }
   }
 }
-function validateNewFilter(query6, filter) {
-  let testQuery = query6;
+function validateNewFilter(query2, filter) {
+  let testQuery = query2;
   const subFilters = filter.getFlattenedFilters();
   for (const subFilter of subFilters) {
     validateNewFieldFilter(testQuery, subFilter);
@@ -38371,12 +38374,12 @@ var QueryDocumentSnapshot = class extends DocumentSnapshot {
 };
 var QuerySnapshot = class {
   /** @hideconstructor */
-  constructor(_firestore, _userDataWriter, query6, _snapshot) {
+  constructor(_firestore, _userDataWriter, query2, _snapshot) {
     this._firestore = _firestore;
     this._userDataWriter = _userDataWriter;
     this._snapshot = _snapshot;
     this.metadata = new SnapshotMetadata(_snapshot.hasPendingWrites, _snapshot.fromCache);
-    this.query = query6;
+    this.query = query2;
   }
   /** An array of all the documents in the `QuerySnapshot`. */
   get docs() {
@@ -38501,13 +38504,13 @@ var ExpUserDataWriter = class extends AbstractUserDataWriter {
     );
   }
 };
-function getDocs(query6) {
-  query6 = cast(query6, Query);
-  const firestore = cast(query6.firestore, Firestore);
+function getDocs(query2) {
+  query2 = cast(query2, Query);
+  const firestore = cast(query2.firestore, Firestore);
   const client = ensureFirestoreConfigured(firestore);
   const userDataWriter = new ExpUserDataWriter(firestore);
-  validateHasExplicitOrderByForLimitToLast(query6._query);
-  return firestoreClientGetDocumentsViaSnapshotListener(client, query6._query).then((snapshot) => new QuerySnapshot(firestore, userDataWriter, query6, snapshot));
+  validateHasExplicitOrderByForLimitToLast(query2._query);
+  return firestoreClientGetDocumentsViaSnapshotListener(client, query2._query).then((snapshot) => new QuerySnapshot(firestore, userDataWriter, query2, snapshot));
 }
 function setDoc(reference, data, options) {
   reference = cast(reference, DocumentReference);
@@ -38663,24 +38666,7 @@ function arrayRemove(...elements) {
 }
 registerFirestore("node");
 
-// src/constants/utilities.ts
-var import_react_toastify = require("react-toastify");
-var mutationConfig = (props) => ({
-  onSuccess: (data) => {
-    const toastOptions = props.successToastLength ? { autoClose: props.successToastLength } : {};
-    if (props.useToast)
-      import_react_toastify.toast.success(props.successMessage, toastOptions);
-    if (props.onFetchSuccess)
-      props.onFetchSuccess(data);
-  },
-  onError: (error) => {
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
-    import_react_toastify.toast.error(props.failedMessage + errorMessage);
-  }
-});
-
 // src/hooks/seasonFetchHooks.ts
-var import_react_query = require("react-query");
 var useFetchSeasons = () => {
   const queryClient = (0, import_react_query.useQueryClient)();
   const refetchSeasons = () => {
@@ -38720,15 +38706,15 @@ var fetchSeasonRQ = (seasonName) => __async(void 0, null, function* () {
 });
 
 // src/hooks/seasonUpdateHooks.ts
-var useAddSeason = (props = {}) => {
-  const mutation = (0, import_react_query2.useMutation)(addSeasonRQ, mutationConfig(props));
+var useAddSeason = () => {
+  const mutation = (0, import_react_query2.useMutation)(addSeasonRQ);
   const addSeason = (seasonName, seasonData) => __async(void 0, null, function* () {
     mutation.mutate({ seasonName, seasonData });
   });
   return __spreadValues({ addSeason }, mutation);
 };
-var useUpdateSeason = (props = {}) => {
-  return (0, import_react_query2.useMutation)(updateSeasonRQ, mutationConfig(props));
+var useUpdateSeason = () => {
+  return (0, import_react_query2.useMutation)(updateSeasonRQ);
 };
 var addSeasonRQ = (_0) => __async(void 0, [_0], function* ({
   seasonName,
@@ -38887,8 +38873,8 @@ var fetchAllCurrentUsersRQ = () => __async(void 0, null, function* () {
 
 // src/hooks/scheduleUpdateHooks.ts
 var import_react_query5 = require("react-query");
-var useUpdateSeasonSchedule = (props = {}) => {
-  return (0, import_react_query5.useMutation)(updateSeasonScheduleRQ, mutationConfig(props));
+var useUpdateSeasonSchedule = () => {
+  return (0, import_react_query5.useMutation)(updateSeasonScheduleRQ);
 };
 var updateSeasonScheduleRQ = (_0) => __async(void 0, [_0], function* ({
   seasonName,
@@ -38908,14 +38894,14 @@ var useFetchTeamById = (teamId) => {
   });
 };
 var useFetchTeamsFromSeason = (seasonName) => {
-  const query6 = (0, import_react_query6.useQuery)(
+  const query2 = (0, import_react_query6.useQuery)(
     ["teamsFromSeason", seasonName],
     () => fetchTeamsFromSeasonRQ(seasonName),
     {
       enabled: !!seasonName
     }
   );
-  return query6;
+  return query2;
 };
 var fetchTeamByIdRQ = (teamId) => __async(void 0, null, function* () {
   if (teamId === void 0) {
@@ -39153,8 +39139,8 @@ var createNewTeamData = (teamName, seasonId) => ({
   losses: 0,
   points: 0
 });
-var useRemoveTeamFromSeason = (props = {}) => {
-  const mutation = (0, import_react_query8.useMutation)(removeTeamFromSeasonRQ, mutationConfig(props));
+var useRemoveTeamFromSeason = () => {
+  const mutation = (0, import_react_query8.useMutation)(removeTeamFromSeasonRQ);
   const removeTeam = (seasonName, teamId) => __async(void 0, null, function* () {
     try {
       yield mutation.mutateAsync({ seasonName, teamId });
@@ -39168,11 +39154,11 @@ var useRemoveTeamFromSeason = (props = {}) => {
   });
   return __spreadValues({ removeTeam }, mutation);
 };
-var useUpdateTeamData = (props = {}) => {
-  return (0, import_react_query8.useMutation)(updateTeamDataRQ, mutationConfig(props));
+var useUpdateTeamData = () => {
+  return (0, import_react_query8.useMutation)(updateTeamDataRQ);
 };
-var useAddNewTeamToSeason = (props = {}) => {
-  return (0, import_react_query8.useMutation)(addNewTeamToSeasonRQ, mutationConfig(props));
+var useAddNewTeamToSeason = () => {
+  return (0, import_react_query8.useMutation)(addNewTeamToSeasonRQ);
 };
 var removeTeamFromSeasonRQ = (_0) => __async(void 0, [_0], function* ({
   seasonName,
