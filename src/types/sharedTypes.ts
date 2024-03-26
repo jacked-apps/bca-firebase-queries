@@ -1,4 +1,4 @@
-import { Timestamp as timestamp } from 'firebase/firestore';
+import { Timestamp as timestamp } from '@firebase/firestore';
 export type Timestamp = timestamp;
 // ------------------------------
 // Alias types

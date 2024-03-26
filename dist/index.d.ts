@@ -1,6 +1,6 @@
 import * as react_query from 'react-query';
-import { Timestamp as Timestamp$1 } from 'firebase/firestore';
-import { User } from 'firebase/auth';
+import { Timestamp as Timestamp$1 } from '@firebase/firestore';
+import { User } from '@firebase/auth';
 
 type Timestamp = Timestamp$1;
 type SeasonName = string;
