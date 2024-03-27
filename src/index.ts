@@ -8,3 +8,4 @@ export * from './hooks/teamFetchHooks';
 export * from './hooks/teamToPlayerOperations';
 export * from './hooks/teamUpdateHooks';
 export * from './hooks/useAuth';
+export * from './Auth';
