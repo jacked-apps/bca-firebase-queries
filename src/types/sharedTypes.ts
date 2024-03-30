@@ -10,7 +10,7 @@ export type SeasonName = string;
 // Represents a teams's name.
 export type TeamName = string;
 // Represents an email address and also is the pastPlayers id
-export type Email = string;
+export type Email = `${string}@${string}.${string}`;
 
 // Represents a team's id in the collection Teams
 export type TeamId = string;

@@ -2252,13 +2252,21 @@ var require_react = __commonJS({
 // src/index.ts
 var src_exports = {};
 __export(src_exports, {
+  LOGIN_MODES: () => LOGIN_MODES,
   addSeasonRQ: () => addSeasonRQ,
   createNewTeamData: () => createNewTeamData,
   fetchCurrentUserById: () => fetchCurrentUserById,
   fetchPastPlayerByIdRQ: () => fetchPastPlayerByIdRQ,
   fetchSeasonRQ: () => fetchSeasonRQ,
   fetchTeamByIdRQ: () => fetchTeamByIdRQ,
+  getCurrentUser: () => getCurrentUser,
+  loginUser: () => loginUser,
+  logoutUser: () => logoutUser,
+  observeAuthState: () => observeAuthState,
+  registerUser: () => registerUser,
   removeAllPlayersFromTeamRQ: () => removeAllPlayersFromTeamRQ,
+  resetPassword: () => resetPassword,
+  sendVerificationEmail: () => sendVerificationEmail,
   updateSeasonRQ: () => updateSeasonRQ,
   updateSeasonScheduleRQ: () => updateSeasonScheduleRQ,
   useAddNewTeamToSeason: () => useAddNewTeamToSeason,
@@ -2870,15 +2878,81 @@ var useAuth = () => {
   }, []);
   return { user };
 };
+
+// src/Auth.ts
+var import_auth3 = require("@firebase/auth");
+var LOGIN_MODES = {
+  LOGIN: "login",
+  REGISTER: "register",
+  RESET_PASSWORD: "resetPassword"
+};
+var registerUser = (email, password) => __async(void 0, null, function* () {
+  try {
+    const response = yield (0, import_auth3.createUserWithEmailAndPassword)(
+      auth,
+      email,
+      password
+    );
+    return response.user;
+  } catch (error) {
+    throw error;
+  }
+});
+var loginUser = (email, password) => __async(void 0, null, function* () {
+  try {
+    const response = yield (0, import_auth3.signInWithEmailAndPassword)(auth, email, password);
+    return response.user;
+  } catch (error) {
+    throw error;
+  }
+});
+var getCurrentUser = () => auth.currentUser;
+var resetPassword = (email) => __async(void 0, null, function* () {
+  try {
+    yield (0, import_auth3.sendPasswordResetEmail)(auth, email);
+    alert("Reset Password sent to your Email");
+  } catch (error) {
+    console.error("Error sending reset password email", error);
+    throw error;
+  }
+});
+var sendVerificationEmail = (user) => __async(void 0, null, function* () {
+  try {
+    yield (0, import_auth3.sendEmailVerification)(user);
+    console.log("Verification email sent.");
+  } catch (error) {
+    console.error("Error sending verification email:", error);
+    throw error;
+  }
+});
+var logoutUser = () => __async(void 0, null, function* () {
+  try {
+    yield (0, import_auth3.signOut)(auth);
+  } catch (error) {
+    console.error("Error signing out:", error);
+    throw error;
+  }
+});
+var observeAuthState = (callback) => {
+  return (0, import_auth3.onAuthStateChanged)(auth, callback);
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  LOGIN_MODES,
   addSeasonRQ,
   createNewTeamData,
   fetchCurrentUserById,
   fetchPastPlayerByIdRQ,
   fetchSeasonRQ,
   fetchTeamByIdRQ,
+  getCurrentUser,
+  loginUser,
+  logoutUser,
+  observeAuthState,
+  registerUser,
   removeAllPlayersFromTeamRQ,
+  resetPassword,
+  sendVerificationEmail,
   updateSeasonRQ,
   updateSeasonScheduleRQ,
   useAddNewTeamToSeason,

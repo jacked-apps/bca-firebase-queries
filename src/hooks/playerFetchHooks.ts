@@ -69,7 +69,7 @@ export const fetchPastPlayerByIdRQ = async (
   const playerDocSnapshot = await getDoc(playerDoc);
   if (playerDocSnapshot.exists()) {
     return {
-      id: playerDocSnapshot.id,
+      id: playerDocSnapshot.id as Email,
       ...(playerDocSnapshot.data() as Omit<PastPlayer, 'id'>),
     };
   } else {
@@ -116,7 +116,7 @@ const fetchAllPastPlayersRQ = async (): Promise<PastPlayer[]> => {
     const playerData = doc.data() as PastPlayer;
     playersData.push({
       ...playerData,
-      id: doc.id,
+      id: doc.id as Email,
     });
   });
 

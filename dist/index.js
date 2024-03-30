@@ -2847,14 +2847,87 @@ var useAuth = () => {
   }, []);
   return { user };
 };
+
+// src/Auth.ts
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signOut,
+  onAuthStateChanged as onAuthStateChanged2
+} from "@firebase/auth";
+var LOGIN_MODES = {
+  LOGIN: "login",
+  REGISTER: "register",
+  RESET_PASSWORD: "resetPassword"
+};
+var registerUser = (email, password) => __async(void 0, null, function* () {
+  try {
+    const response = yield createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return response.user;
+  } catch (error) {
+    throw error;
+  }
+});
+var loginUser = (email, password) => __async(void 0, null, function* () {
+  try {
+    const response = yield signInWithEmailAndPassword(auth, email, password);
+    return response.user;
+  } catch (error) {
+    throw error;
+  }
+});
+var getCurrentUser = () => auth.currentUser;
+var resetPassword = (email) => __async(void 0, null, function* () {
+  try {
+    yield sendPasswordResetEmail(auth, email);
+    alert("Reset Password sent to your Email");
+  } catch (error) {
+    console.error("Error sending reset password email", error);
+    throw error;
+  }
+});
+var sendVerificationEmail = (user) => __async(void 0, null, function* () {
+  try {
+    yield sendEmailVerification(user);
+    console.log("Verification email sent.");
+  } catch (error) {
+    console.error("Error sending verification email:", error);
+    throw error;
+  }
+});
+var logoutUser = () => __async(void 0, null, function* () {
+  try {
+    yield signOut(auth);
+  } catch (error) {
+    console.error("Error signing out:", error);
+    throw error;
+  }
+});
+var observeAuthState = (callback) => {
+  return onAuthStateChanged2(auth, callback);
+};
 export {
+  LOGIN_MODES,
   addSeasonRQ,
   createNewTeamData,
   fetchCurrentUserById,
   fetchPastPlayerByIdRQ,
   fetchSeasonRQ,
   fetchTeamByIdRQ,
+  getCurrentUser,
+  loginUser,
+  logoutUser,
+  observeAuthState,
+  registerUser,
   removeAllPlayersFromTeamRQ,
+  resetPassword,
+  sendVerificationEmail,
   updateSeasonRQ,
   updateSeasonScheduleRQ,
   useAddNewTeamToSeason,

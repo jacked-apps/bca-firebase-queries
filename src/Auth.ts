@@ -1,15 +1,14 @@
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   sendEmailVerification,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   signOut,
   onAuthStateChanged,
+  User,
 } from '@firebase/auth';
-import app from '../../firebaseConfig';
-
-const auth = getAuth(app);
+import { auth } from '../firebaseConfig';
+import {Email} from './types/sharedTypes';
 
 /**
  * INDEX TABLE OF CONTENTS
@@ -48,7 +47,7 @@ export const LOGIN_MODES = {
  * @throws {Error} Throws an error if registration fails
  */
 
-export const registerUser = async (email, password) => {
+export const registerUser = async (email: Email, password: string) => {
   try {
     const response = await createUserWithEmailAndPassword(
       auth,
@@ -68,7 +67,7 @@ export const registerUser = async (email, password) => {
  * @throws {Error} Throws an error if login fails
  */
 
-export const loginUser = async (email, password) => {
+export const loginUser = async (email: Email, password: string) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password);
     return response.user;
@@ -93,7 +92,7 @@ export const getCurrentUser = () => auth.currentUser;
  * @throws {Error} Throws an error if sending reset password email fails
  */
 
-export const resetPassword = async (email) => {
+export const resetPassword = async (email: Email) => {
   try {
     await sendPasswordResetEmail(auth, email);
     alert('Reset Password sent to your Email');
@@ -113,7 +112,7 @@ export const resetPassword = async (email) => {
  * @throws {Error} Throws an error if sending reset password email fails
  */
 
-export const sendVerificationEmail = async (user) => {
+export const sendVerificationEmail = async (user: User) => {
   try {
     await sendEmailVerification(user);
     console.log('Verification email sent.');
@@ -146,6 +145,6 @@ export const logoutUser = async () => {
  * @returns {function} Unsubscribe function
  */
 
-export const observeAuthState = (callback) => {
+export const observeAuthState = (callback: any) => {
   return onAuthStateChanged(auth, callback);
 };

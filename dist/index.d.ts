@@ -1,10 +1,11 @@
 import * as react_query from 'react-query';
 import { Timestamp as Timestamp$1 } from '@firebase/firestore';
 import { User } from '@firebase/auth';
+import * as _firebase_util from '@firebase/util';
 
 type Timestamp = Timestamp$1;
 type SeasonName = string;
-type Email = string;
+type Email = `${string}@${string}.${string}`;
 type TeamId = string;
 type PlayerId = string;
 type MatchupId = string;
@@ -635,4 +636,64 @@ declare const useAuth: () => {
     user: User | null;
 };
 
-export { addSeasonRQ, createNewTeamData, fetchCurrentUserById, fetchPastPlayerByIdRQ, fetchSeasonRQ, fetchTeamByIdRQ, removeAllPlayersFromTeamRQ, updateSeasonRQ, updateSeasonScheduleRQ, useAddNewTeamToSeason, useAddPlayerToTeam, useAddSeason, useAddTeamToBothViaPlayer, useAddTeamToBothViaUser, useAuth, useFetchCurrentUserById, useFetchCurrentUsers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPastPlayers, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useRemoveTeamFromBothViaPlayer, useRemoveTeamFromBothViaUser, useRemoveTeamFromSeason, useUpdateSeason, useUpdateSeasonSchedule, useUpdateTeamData };
+/**
+ * INDEX TABLE OF CONTENTS
+ * 1. Enums
+ * 2. User functions
+ * 3. Password functions
+ * 4. Email Functions
+ * 5. Session Management Functions
+ */
+/**
+ * @typedef {Object} MODES
+ * @property {'login'} LOGIN - Represents the login page
+ * @property {'register'} REGISTER - Represents the registration page
+ * @property {'resetPassword'} RESET_PASSWORD - Represents the reset password page
+ */
+declare const LOGIN_MODES: {
+    LOGIN: string;
+    REGISTER: string;
+    RESET_PASSWORD: string;
+};
+/** Register a user
+ * @param {string} email users email
+ * @param {string} password users password
+ * @returns {object} User response object
+ * @throws {Error} Throws an error if registration fails
+ */
+declare const registerUser: (email: Email, password: string) => Promise<User>;
+/** Log in a user
+ * @param {string} email users email
+ * @param {string} password users password
+ * @returns {object} User response object
+ * @throws {Error} Throws an error if login fails
+ */
+declare const loginUser: (email: Email, password: string) => Promise<User>;
+/** Get current user
+ * @returns {object} User response object
+ */
+declare const getCurrentUser: () => User | null;
+/** Sends a password email to the provided email address
+ * @param {string} email users email
+ * @returns {undefined}
+ * @throws {Error} Throws an error if sending reset password email fails
+ */
+declare const resetPassword: (email: Email) => Promise<void>;
+/** Sends verification email
+ * @param {object} user Firebase user object
+ * @returns {undefined}
+ * @throws {Error} Throws an error if sending reset password email fails
+ */
+declare const sendVerificationEmail: (user: User) => Promise<void>;
+/** Logs out the current user
+ * @returns {undefined}
+ * @throws {Error} Throws and error if logout fails
+ */
+declare const logoutUser: () => Promise<void>;
+/** Subscribe to authentication state changes
+ * @param {function} callback Callback function to handle auth state changes
+ * @returns {function} Unsubscribe function
+ */
+declare const observeAuthState: (callback: any) => _firebase_util.Unsubscribe;
+
+export { LOGIN_MODES, addSeasonRQ, createNewTeamData, fetchCurrentUserById, fetchPastPlayerByIdRQ, fetchSeasonRQ, fetchTeamByIdRQ, getCurrentUser, loginUser, logoutUser, observeAuthState, registerUser, removeAllPlayersFromTeamRQ, resetPassword, sendVerificationEmail, updateSeasonRQ, updateSeasonScheduleRQ, useAddNewTeamToSeason, useAddPlayerToTeam, useAddSeason, useAddTeamToBothViaPlayer, useAddTeamToBothViaUser, useAuth, useFetchCurrentUserById, useFetchCurrentUsers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPastPlayers, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useRemoveTeamFromBothViaPlayer, useRemoveTeamFromBothViaUser, useRemoveTeamFromSeason, useUpdateSeason, useUpdateSeasonSchedule, useUpdateTeamData };
