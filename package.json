@@ -4,7 +4,7 @@
   "description": "Shared query library for BCA mobile and web applications",
   "type": "module",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
@@ -15,11 +15,12 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-query": "^3.39.3",
     "@firebase/app": "^0.9.29",
     "@firebase/auth": "^1.6.2",
-    "@firebase/firestore": "^4.5.0",
-    "react-query": "^3.39.3"
+    "@firebase/firestore": "^4.5.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.72",

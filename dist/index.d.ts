@@ -1,21 +1,24 @@
 import * as react_query from 'react-query';
 import { Timestamp as Timestamp$1 } from '@firebase/firestore';
+import * as _firebase_auth from '@firebase/auth';
 import { User } from '@firebase/auth';
-import * as _firebase_util from '@firebase/util';
 
 type Timestamp = Timestamp$1;
 type SeasonName = string;
+type TeamName = string;
 type Email = `${string}@${string}.${string}`;
 type TeamId = string;
 type PlayerId = string;
 type MatchupId = string;
 type Game = '8 Ball' | '9 Ball' | '10 Ball';
+type TimeOfYear = 'Spring' | 'Summer' | 'Fall' | 'Winter';
 type PoolHall = "Butera's Billiards" | 'Billiard Plaza';
 type Names = {
     firstName: string;
     lastName: string;
     nickname: string;
 };
+type DateFormat = 'long' | 'short' | 'numeric';
 type DayOfWeek = 'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday';
 type DateOrStamp = Timestamp | Date;
 type StampOrInvalid = Timestamp | NotDate;
@@ -177,6 +180,44 @@ declare const updateSeasonRQ: ({ seasonName, seasonData, }: {
     seasonData: Partial<Season>;
 }) => Promise<void>;
 
+type MatchWeek = {
+    [tableNumber: string]: {
+        home: TeamInfo;
+        away: TeamInfo;
+        winner: TeamId | null;
+        gamePlay: GamePlay;
+        seasonId: SeasonName;
+        completed: boolean;
+    };
+};
+type TeamInfo = {
+    id: TeamId;
+    teamName: string;
+    lineup: Lineup;
+    teamHandicap: number;
+    gamesWon: number;
+    winsNeeded: number;
+    tiePossible: boolean;
+};
+type Lineup = {
+    player1: ActivePlayer;
+    player2: ActivePlayer;
+    player3: ActivePlayer;
+};
+type ActivePlayer = Names & {
+    id: PlayerId;
+    handicap: number;
+    wins: number;
+    losses: number;
+};
+type GamePlay = {
+    [gameKey: string]: GamePlayResults;
+};
+type GamePlayResults = {
+    breaker: PlayerId;
+    racker: PlayerId;
+    winner: PlayerId;
+};
 type TableMatchup = {
     home: number;
     away: number;
@@ -694,6 +735,18 @@ declare const logoutUser: () => Promise<void>;
  * @param {function} callback Callback function to handle auth state changes
  * @returns {function} Unsubscribe function
  */
-declare const observeAuthState: (callback: any) => _firebase_util.Unsubscribe;
+declare const observeAuthState: (callback: any) => _firebase_auth.Unsubscribe;
 
-export { LOGIN_MODES, addSeasonRQ, createNewTeamData, fetchCurrentUserById, fetchPastPlayerByIdRQ, fetchSeasonRQ, fetchTeamByIdRQ, getCurrentUser, loginUser, logoutUser, observeAuthState, registerUser, removeAllPlayersFromTeamRQ, resetPassword, sendVerificationEmail, updateSeasonRQ, updateSeasonScheduleRQ, useAddNewTeamToSeason, useAddPlayerToTeam, useAddSeason, useAddTeamToBothViaPlayer, useAddTeamToBothViaUser, useAuth, useFetchCurrentUserById, useFetchCurrentUsers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPastPlayers, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useRemoveTeamFromBothViaPlayer, useRemoveTeamFromBothViaUser, useRemoveTeamFromSeason, useUpdateSeason, useUpdateSeasonSchedule, useUpdateTeamData };
+declare const failedFetch = "Failed to fetch ";
+declare const failedUpdate = "Failed to update ";
+declare const failedCreate = "Failed to create ";
+declare const tryAgain = "Please try again. ";
+declare const createSuccess = " created successfully! ";
+declare const updateSuccess = " successfully updated!";
+declare const notFound = " not found in Firestore.";
+declare const deleteSuccess = "Successfully removed ";
+declare const deleteFailed = "Failed to remove ";
+declare const fromStore = " from Firestore.";
+declare const toStore = " to Firestore.";
+
+export { type ActivePlayer, type CurrentUser, type DateFormat, type DateOrStamp, type DayOfWeek, type Email, type Game, type GamePlay, type GamePlayResults, type Holiday, LOGIN_MODES, type Lineup, type MatchWeek, type MatchupId, type Names, type NotDate, type PastPlayer, type PlayerId, type PoolHall, type RoundRobinSchedule, type RoundRobinScheduleFinished, type Schedule, type Season, type SeasonName, type StampOrInvalid, type TableMatchup, type TableMatchupFinished, type Team, type TeamId, type TeamInfo, type TeamName, type TeamPlayer, type TeamPlayerRole, type TimeOfYear, type Timestamp, addSeasonRQ, createNewTeamData, createSuccess, deleteFailed, deleteSuccess, failedCreate, failedFetch, failedUpdate, fetchCurrentUserById, fetchPastPlayerByIdRQ, fetchSeasonRQ, fetchTeamByIdRQ, fromStore, getCurrentUser, loginUser, logoutUser, notFound, observeAuthState, registerUser, removeAllPlayersFromTeamRQ, resetPassword, sendVerificationEmail, toStore, tryAgain, updateSeasonRQ, updateSeasonScheduleRQ, updateSuccess, useAddNewTeamToSeason, useAddPlayerToTeam, useAddSeason, useAddTeamToBothViaPlayer, useAddTeamToBothViaUser, useAuth, useFetchCurrentUserById, useFetchCurrentUsers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPastPlayers, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useRemoveTeamFromBothViaPlayer, useRemoveTeamFromBothViaUser, useRemoveTeamFromSeason, useUpdateSeason, useUpdateSeasonSchedule, useUpdateTeamData };
