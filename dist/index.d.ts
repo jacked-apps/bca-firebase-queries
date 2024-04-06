@@ -1,7 +1,12 @@
-import * as react_query from 'react-query';
-import { Timestamp as Timestamp$1 } from '@firebase/firestore';
 import * as _firebase_auth from '@firebase/auth';
-import { User } from '@firebase/auth';
+import * as _firebase_firestore from '@firebase/firestore';
+import * as react_query from 'react-query';
+import { Timestamp as Timestamp$1 } from 'firebase/firestore';
+import { User } from 'firebase/auth';
+import * as _firebase_util from '@firebase/util';
+
+declare const db: _firebase_firestore.Firestore;
+declare const auth: _firebase_auth.Auth;
 
 type Timestamp = Timestamp$1;
 type SeasonName = string;
@@ -735,7 +740,7 @@ declare const logoutUser: () => Promise<void>;
  * @param {function} callback Callback function to handle auth state changes
  * @returns {function} Unsubscribe function
  */
-declare const observeAuthState: (callback: any) => _firebase_auth.Unsubscribe;
+declare const observeAuthState: (callback: any) => _firebase_util.Unsubscribe;
 
 declare const failedFetch = "Failed to fetch ";
 declare const failedUpdate = "Failed to update ";
@@ -749,4 +754,4 @@ declare const deleteFailed = "Failed to remove ";
 declare const fromStore = " from Firestore.";
 declare const toStore = " to Firestore.";
 
-export { type ActivePlayer, type CurrentUser, type DateFormat, type DateOrStamp, type DayOfWeek, type Email, type Game, type GamePlay, type GamePlayResults, type Holiday, LOGIN_MODES, type Lineup, type MatchWeek, type MatchupId, type Names, type NotDate, type PastPlayer, type PlayerId, type PoolHall, type RoundRobinSchedule, type RoundRobinScheduleFinished, type Schedule, type Season, type SeasonName, type StampOrInvalid, type TableMatchup, type TableMatchupFinished, type Team, type TeamId, type TeamInfo, type TeamName, type TeamPlayer, type TeamPlayerRole, type TimeOfYear, type Timestamp, addSeasonRQ, createNewTeamData, createSuccess, deleteFailed, deleteSuccess, failedCreate, failedFetch, failedUpdate, fetchCurrentUserById, fetchPastPlayerByIdRQ, fetchSeasonRQ, fetchTeamByIdRQ, fromStore, getCurrentUser, loginUser, logoutUser, notFound, observeAuthState, registerUser, removeAllPlayersFromTeamRQ, resetPassword, sendVerificationEmail, toStore, tryAgain, updateSeasonRQ, updateSeasonScheduleRQ, updateSuccess, useAddNewTeamToSeason, useAddPlayerToTeam, useAddSeason, useAddTeamToBothViaPlayer, useAddTeamToBothViaUser, useAuth, useFetchCurrentUserById, useFetchCurrentUsers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPastPlayers, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useRemoveTeamFromBothViaPlayer, useRemoveTeamFromBothViaUser, useRemoveTeamFromSeason, useUpdateSeason, useUpdateSeasonSchedule, useUpdateTeamData };
+export { type ActivePlayer, type CurrentUser, type DateFormat, type DateOrStamp, type DayOfWeek, type Email, type Game, type GamePlay, type GamePlayResults, type Holiday, LOGIN_MODES, type Lineup, type MatchWeek, type MatchupId, type Names, type NotDate, type PastPlayer, type PlayerId, type PoolHall, type RoundRobinSchedule, type RoundRobinScheduleFinished, type Schedule, type Season, type SeasonName, type StampOrInvalid, type TableMatchup, type TableMatchupFinished, type Team, type TeamId, type TeamInfo, type TeamName, type TeamPlayer, type TeamPlayerRole, type TimeOfYear, type Timestamp, addSeasonRQ, auth, createNewTeamData, createSuccess, db, deleteFailed, deleteSuccess, failedCreate, failedFetch, failedUpdate, fetchCurrentUserById, fetchPastPlayerByIdRQ, fetchSeasonRQ, fetchTeamByIdRQ, fromStore, getCurrentUser, loginUser, logoutUser, notFound, observeAuthState, registerUser, removeAllPlayersFromTeamRQ, resetPassword, sendVerificationEmail, toStore, tryAgain, updateSeasonRQ, updateSeasonScheduleRQ, updateSuccess, useAddNewTeamToSeason, useAddPlayerToTeam, useAddSeason, useAddTeamToBothViaPlayer, useAddTeamToBothViaUser, useAuth, useFetchCurrentUserById, useFetchCurrentUsers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPastPlayers, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useRemoveTeamFromBothViaPlayer, useRemoveTeamFromBothViaUser, useRemoveTeamFromSeason, useUpdateSeason, useUpdateSeasonSchedule, useUpdateTeamData };

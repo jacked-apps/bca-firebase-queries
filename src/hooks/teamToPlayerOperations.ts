@@ -41,7 +41,7 @@ import {
   arrayUnion,
   arrayRemove,
   runTransaction,
-} from '@firebase/firestore'; // Import getFirestore from Firebase
+} from 'firebase/firestore'; // Import getFirestore from Firebase
 
 // types
 import { TeamId, Email, PlayerId } from '../types/sharedTypes';

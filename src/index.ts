@@ -1,3 +1,4 @@
+export { db, auth } from '../firebaseConfig';
 export * from './hooks/seasonUpdateHooks';
 export * from './hooks/matchupFetchHooks';
 export * from './hooks/playerFetchHooks';
