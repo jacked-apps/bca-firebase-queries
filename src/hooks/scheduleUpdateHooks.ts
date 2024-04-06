@@ -15,7 +15,7 @@ import { useMutation } from 'react-query';
 
 // firebase
 import { db } from '../../firebaseConfig';
-import { updateDoc, doc } from '@firebase/firestore';
+import { updateDoc, doc } from 'firebase/firestore';
 
 //types
 import { Schedule } from '../types/seasonTypes';

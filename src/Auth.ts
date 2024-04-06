@@ -6,9 +6,9 @@ import {
   signOut,
   onAuthStateChanged,
   User,
-} from '@firebase/auth';
+} from 'firebase/auth';
 import { auth } from '../firebaseConfig';
-import {Email} from './types/sharedTypes';
+import { Email } from './types/sharedTypes';
 
 /**
  * INDEX TABLE OF CONTENTS

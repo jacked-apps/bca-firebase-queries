@@ -28,7 +28,7 @@ import {
   deleteDoc,
   doc,
   runTransaction,
-} from '@firebase/firestore';
+} from 'firebase/firestore';
 
 // types
 import { SeasonName, TeamId } from '../types/sharedTypes';

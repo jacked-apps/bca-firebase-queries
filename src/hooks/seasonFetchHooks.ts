@@ -24,7 +24,7 @@ import {
   getDocs,
   doc,
   getDoc,
-} from '@firebase/firestore';
+} from 'firebase/firestore';
 
 // types
 import { Season } from '../types/seasonTypes';

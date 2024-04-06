@@ -16,7 +16,7 @@ import { fetchSeasonRQ } from './seasonFetchHooks';
 
 // firebase
 import { db } from '../../firebaseConfig';
-import { updateDoc, doc, setDoc } from '@firebase/firestore';
+import { updateDoc, doc, setDoc } from 'firebase/firestore';
 
 // types
 import { Season } from '../types/seasonTypes';
