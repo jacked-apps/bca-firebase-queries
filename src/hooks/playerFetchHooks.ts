@@ -16,7 +16,7 @@
 // IMPORTS
 //------------------------
 import { useQuery } from 'react-query';
-import { db } from '../../firebaseConfig';
+import { db } from '../';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { Email } from '../types/sharedTypes';
 import { CurrentUser, PastPlayer } from '../types/userTypes';

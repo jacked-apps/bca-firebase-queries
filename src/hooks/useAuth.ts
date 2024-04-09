@@ -1,19 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { User, onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../../firebaseConfig';
+import { FirebaseContext } from '../';
 
 export const useAuth = (): { user: User | null } => {
+  const { auth } = useContext(FirebaseContext)
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    if(!auth) {
+      return;
+    }
+    return onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  }, [auth]);
 
   return { user };
 };

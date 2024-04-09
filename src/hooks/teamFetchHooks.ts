@@ -13,11 +13,11 @@
 //------------------------
 
 // react query
-import { useQuery, UseQueryOptions } from 'react-query';
+import { useQuery } from 'react-query';
 import { fetchSeasonRQ } from './seasonFetchHooks';
 
 // firebase
-import { db } from '../../firebaseConfig';
+import { db } from '../';
 import { doc, getDoc } from 'firebase/firestore';
 
 // types

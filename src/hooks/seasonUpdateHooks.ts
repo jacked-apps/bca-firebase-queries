@@ -15,7 +15,7 @@ import { useMutation } from 'react-query';
 import { fetchSeasonRQ } from './seasonFetchHooks';
 
 // firebase
-import { db } from '../../firebaseConfig';
+import { db } from '../';
 import { updateDoc, doc, setDoc } from 'firebase/firestore';
 
 // types

@@ -33,7 +33,7 @@ import {
 } from './playerFetchHooks';
 
 // firebase
-import { db } from '../../firebaseConfig';
+import { db } from '../';
 import {
   doc,
   updateDoc,

@@ -21,7 +21,7 @@ import { fetchSeasonRQ } from './seasonFetchHooks';
 import { removeAllPlayersFromTeamRQ } from './teamToPlayerOperations';
 
 //firebase
-import { db } from '../../firebaseConfig';
+import { db } from '../';
 import {
   collection,
   updateDoc,

@@ -5,6 +5,7 @@ export default defineConfig({
   format: ["esm"],
   dts: true, // Generate declaration file (.d.ts)
   splitting: false,
+  skipNodeModulesBundle: true,
   sourcemap: true,
   clean: true,
 });

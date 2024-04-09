@@ -14,7 +14,7 @@
 import { useMutation } from 'react-query';
 
 // firebase
-import { db } from '../../firebaseConfig';
+import { db } from '../';
 import { updateDoc, doc } from 'firebase/firestore';
 
 //types

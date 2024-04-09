@@ -16,8 +16,7 @@
 import { useQuery } from 'react-query';
 
 // firebase
-import { db } from '../../firebaseConfig';
-import { doc, getDoc } from 'firebase/firestore';
+import { Firestore, doc, getDoc } from 'firebase/firestore';
 
 // types
 import { SeasonName } from '../types/sharedTypes';
@@ -27,15 +26,18 @@ import {
   RoundRobinScheduleFinished,
 } from '../types/matchupTypes';
 import { notFound } from '../constants/messages';
+import {useContext} from 'react';
+import {FirebaseContext} from '../FirebaseProvider';
 
 // ------------------------------
 // 1. HOOKS
 // ------------------------------
 
 export const useFetchRoundRobin = (numberOfTeams: number | undefined) => {
+  const { db } = useContext(FirebaseContext)
   return useQuery(
     ['roundRobin', numberOfTeams],
-    () => fetchRoundRobinRQ(numberOfTeams),
+    () => fetchRoundRobinRQ(db!, numberOfTeams),
     { enabled: !!numberOfTeams }
   );
 };
@@ -43,9 +45,10 @@ export const useFetchRoundRobin = (numberOfTeams: number | undefined) => {
 export const useFetchFinishedRoundRobin = (
   seasonName: SeasonName | undefined
 ) => {
+  const { db } = useContext(FirebaseContext)
   return useQuery(
     ['roundRobinFinished', seasonName],
-    () => fetchFinishedRoundRobinRQ(seasonName),
+    () => fetchFinishedRoundRobinRQ(db!, seasonName),
     { enabled: !!seasonName }
   );
 };
@@ -88,6 +91,7 @@ const adjustNumberOfTeams = (numberOfTeams: number) => {
  * Returns the schedule if found, else throws an error.
  */
 const fetchRoundRobinRQ = async (
+  db: Firestore,
   numberOfTeams: number | undefined
 ): Promise<RoundRobinSchedule | null> => {
   if (numberOfTeams === undefined) {
@@ -113,6 +117,7 @@ const fetchRoundRobinRQ = async (
  * Returns the schedule if found, else throws an error.
  */
 const fetchFinishedRoundRobinRQ = async (
+  db: Firestore,
   seasonId: SeasonName | undefined
 ): Promise<RoundRobinScheduleFinished | null> => {
   if (seasonId === undefined) {

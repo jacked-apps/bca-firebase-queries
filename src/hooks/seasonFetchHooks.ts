@@ -16,7 +16,7 @@
 import { useQuery, useQueryClient } from 'react-query';
 
 // firebase
-import { db } from '../../firebaseConfig';
+import { db } from '../';
 import {
   collection,
   query,

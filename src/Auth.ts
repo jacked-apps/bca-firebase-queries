@@ -7,7 +7,7 @@ import {
   onAuthStateChanged,
   User,
 } from 'firebase/auth';
-import { auth } from '../firebaseConfig';
+import { auth } from './';
 import {Email} from './types/sharedTypes';
 
 /**
