@@ -16,7 +16,7 @@ type FirebaseProviderProps = {
     credentials: Object;
 };
 declare const FirebaseContext: react.Context<FirebaseContextParams>;
-declare const FirebaseProvider: ({ children, credentials }: PropsWithChildren<FirebaseProviderProps>) => react_jsx_runtime.JSX.Element;
+declare const FirebaseProvider: ({ children, credentials, }: PropsWithChildren<FirebaseProviderProps>) => react_jsx_runtime.JSX.Element;
 
 type Timestamp = Timestamp$1;
 type SeasonName = string;
@@ -278,25 +278,36 @@ type PastPlayer = Names & {
     seasons?: string[];
     teams?: string[];
 };
-type CurrentUser = Names & {
+type Player = Names & {
     id: string;
-    isAdmin?: boolean | string;
-    email: Email;
-    stats?: {
-        [game: string]: {
-            wins: number;
-            losses: number;
-        };
-    };
-    seasons: string[];
-    teams: string[];
-    pastPlayerId?: Email;
+    isAdmin: boolean;
+    leagues: PlayerLeague[];
+    seasons: PlayerSeason[];
+    teams: PlayerTeam[];
+};
+type PlayerLeague = {
+    id: string;
+    locationName: string;
+    name: string;
+    playerHandicap: number;
+};
+type PlayerSeason = {
+    leagueId: string;
+    name: string;
+    seasonHandicap: number;
+    rank: number;
+    losses: number;
+    wins: number;
+};
+type PlayerTeam = {
+    teamId: string;
+    name: string;
 };
 
-declare const useFetchPastPlayerById: (playerId: Email | undefined) => react_query.UseQueryResult<PastPlayer | null, unknown>;
-declare const useFetchCurrentUserById: (id: string | undefined) => react_query.UseQueryResult<CurrentUser | null, unknown>;
-declare const useFetchPastPlayers: () => react_query.UseQueryResult<PastPlayer[], unknown>;
-declare const useFetchCurrentUsers: () => react_query.UseQueryResult<CurrentUser[], unknown>;
+declare const useFetchPastPlayerById: (email: Email | undefined) => react_query.UseQueryResult<PastPlayer | null, unknown>;
+declare const useFetchAllPastPlayers: () => react_query.UseQueryResult<PastPlayer[], unknown>;
+declare const useFetchPlayerById: (id: string | undefined) => react_query.UseQueryResult<Player | null, unknown>;
+declare const useFetchAllPlayers: () => react_query.UseQueryResult<Player[], unknown>;
 /**
  * Fetches a PastPlayer object by ID from Firestore.
  *
@@ -304,15 +315,15 @@ declare const useFetchCurrentUsers: () => react_query.UseQueryResult<CurrentUser
  * @returns A Promise resolving to the PastPlayer object if found, or null if not found.
  * @throws Error if ID is not provided.
  */
-declare const fetchPastPlayerByIdRQ: (playerId: Email | undefined) => Promise<PastPlayer | null>;
+declare const fetchPastPlayerById: (db: Firestore, email: Email | undefined) => Promise<PastPlayer | null>;
 /**
- * Fetches a CurrentUser object by ID from Firestore.
+ * Fetches a Player object by ID from Firestore.
  *
  * @param id - The ID of the user to fetch.
- * @returns A Promise resolving to the CurrentUser object if found, or null if not found.
+ * @returns A Promise resolving to the Player object if found, or null if not found.
  * @throws Error if ID is not provided.
  */
-declare const fetchCurrentUserById: (id: string | undefined) => Promise<CurrentUser | null>;
+declare const fetchPlayerById: (db: Firestore, id: string | undefined) => Promise<Player | null>;
 
 declare const useUpdateSeasonSchedule: () => react_query.UseMutationResult<void, unknown, {
     seasonName: SeasonName;
@@ -502,192 +513,6 @@ declare const useFetchTeamsFromSeason: (seasonName: SeasonName | undefined) => r
  */
 declare const fetchTeamByIdRQ: (teamId: string | undefined) => Promise<Team | null>;
 
-/**
- * Hook to add a player to a team.
- * On success, logs a message.
- * On error, logs a message.
- * @returns The mutation function to add a player to a team.
- */
-declare const useAddPlayerToTeam: () => react_query.UseMutationResult<void, unknown, {
-    teamId: TeamId;
-    role: TeamPlayerRole;
-    playerData: TeamPlayer;
-}, unknown>;
-/**
- * Hook to add a team to both currentPlayer and pastPlayer.
- * On success, logs a message.
- * On error, logs a message.
- * @returns The mutation function to add a team to both player teams.
- */
-declare const useAddTeamToBothViaPlayer: () => react_query.UseMutationResult<void, unknown, string | undefined, unknown>;
-/**
- * Hook to add a team to both currentPlayer and pastPlayer.
- * On success, logs a message.
- * On error, logs a message.
- * @returns The mutation function to add a team to both player teams.
- */
-declare const useAddTeamToBothViaUser: () => react_query.UseMutationResult<void, unknown, string | undefined, unknown>;
-/**
- * Hook to remove a team from both currentPlayer and pastPlayer.
- * On success, logs a message.
- * On error, logs a message.
- * @returns The mutation function to remove a team from both player teams.
- */
-declare const useRemoveTeamFromBothViaPlayer: () => react_query.UseMutationResult<void, unknown, string | undefined, unknown>;
-/**
- * Hook to remove a team from both currentPlayer and pastPlayer.
- * On success, logs a message.
- * On error, logs a message.
- * @returns The mutation function to remove a team from both player teams.
- */
-declare const useRemoveTeamFromBothViaUser: () => react_query.UseMutationResult<void, unknown, string | undefined, unknown>;
-/**
- * Removes all players from a team by:
- * 1. Getting the team document.
- * 2. Getting the player IDs from the team document.
- * 3. Looping through each player ID:
- *   3a. Get the pastPlayer document.
- *   3b. Remove the team ID from the pastPlayer's teams array.
- *   3c. If the pastPlayer has a currentUserId, get that document.
- *   3d. Remove the team ID from the currentUser's teams array.
- *
- * This is done in a transaction to ensure consistency.
- */
-declare const removeAllPlayersFromTeamRQ: (teamId: TeamId) => Promise<void>;
-
-declare const createNewTeamData: (teamName: string, seasonId: SeasonName) => {
-    teamName: string;
-    seasonId: string;
-    players: {
-        captain: {};
-        player2: {};
-        player3: {};
-        player4: {};
-        player5: {};
-    };
-    wins: number;
-    losses: number;
-    points: number;
-};
-/**
- * Hook to remove a team from a season.
- *
- * Calls removeTeamFromSeasonRQ to remove the team ID from the season's
- * team array. Also deletes the team document and removes teamId players documents.
- *
- * @param props - Optional config props for useMutation
- * @returns Object with removeTeam function and mutation result/methods
- */
-declare const useRemoveTeamFromSeason: () => {
-    data: undefined;
-    error: null;
-    isError: false;
-    isIdle: true;
-    isLoading: false;
-    isSuccess: false;
-    status: "idle";
-    mutate: react_query.UseMutateFunction<void, unknown, {
-        seasonName: SeasonName;
-        teamId: TeamId;
-    }, unknown>;
-    reset: () => void;
-    context: unknown;
-    failureCount: number;
-    isPaused: boolean;
-    variables: {
-        seasonName: SeasonName;
-        teamId: TeamId;
-    } | undefined;
-    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
-        seasonName: SeasonName;
-        teamId: TeamId;
-    }, unknown>;
-    removeTeam: (seasonName: SeasonName, teamId: TeamId) => Promise<void>;
-} | {
-    data: undefined;
-    error: null;
-    isError: false;
-    isIdle: false;
-    isLoading: true;
-    isSuccess: false;
-    status: "loading";
-    mutate: react_query.UseMutateFunction<void, unknown, {
-        seasonName: SeasonName;
-        teamId: TeamId;
-    }, unknown>;
-    reset: () => void;
-    context: unknown;
-    failureCount: number;
-    isPaused: boolean;
-    variables: {
-        seasonName: SeasonName;
-        teamId: TeamId;
-    } | undefined;
-    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
-        seasonName: SeasonName;
-        teamId: TeamId;
-    }, unknown>;
-    removeTeam: (seasonName: SeasonName, teamId: TeamId) => Promise<void>;
-} | {
-    data: undefined;
-    error: unknown;
-    isError: true;
-    isIdle: false;
-    isLoading: false;
-    isSuccess: false;
-    status: "error";
-    mutate: react_query.UseMutateFunction<void, unknown, {
-        seasonName: SeasonName;
-        teamId: TeamId;
-    }, unknown>;
-    reset: () => void;
-    context: unknown;
-    failureCount: number;
-    isPaused: boolean;
-    variables: {
-        seasonName: SeasonName;
-        teamId: TeamId;
-    } | undefined;
-    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
-        seasonName: SeasonName;
-        teamId: TeamId;
-    }, unknown>;
-    removeTeam: (seasonName: SeasonName, teamId: TeamId) => Promise<void>;
-} | {
-    data: void;
-    error: null;
-    isError: false;
-    isIdle: false;
-    isLoading: false;
-    isSuccess: true;
-    status: "success";
-    mutate: react_query.UseMutateFunction<void, unknown, {
-        seasonName: SeasonName;
-        teamId: TeamId;
-    }, unknown>;
-    reset: () => void;
-    context: unknown;
-    failureCount: number;
-    isPaused: boolean;
-    variables: {
-        seasonName: SeasonName;
-        teamId: TeamId;
-    } | undefined;
-    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
-        seasonName: SeasonName;
-        teamId: TeamId;
-    }, unknown>;
-    removeTeam: (seasonName: SeasonName, teamId: TeamId) => Promise<void>;
-};
-declare const useUpdateTeamData: () => react_query.UseMutationResult<void, unknown, {
-    teamId: TeamId;
-    data: Team;
-}, unknown>;
-declare const useAddNewTeamToSeason: () => react_query.UseMutationResult<void, unknown, {
-    seasonName: SeasonName;
-    teamName: string;
-}, unknown>;
-
 declare const useAuth: () => {
     user: User | null;
 };
@@ -768,4 +593,4 @@ declare let dbOut: Firestore$1;
 declare let authOut: Auth$1;
 declare const init: () => void;
 
-export { type ActivePlayer, type CurrentUser, type DateFormat, type DateOrStamp, type DayOfWeek, type Email, FirebaseContext, FirebaseProvider, type Game, type GamePlay, type GamePlayResults, type Holiday, LOGIN_MODES, type Lineup, type MatchWeek, type MatchupId, type Names, type NotDate, type PastPlayer, type PlayerId, type PoolHall, type RoundRobinSchedule, type RoundRobinScheduleFinished, type Schedule, type Season, type SeasonName, type StampOrInvalid, type TableMatchup, type TableMatchupFinished, type Team, type TeamId, type TeamInfo, type TeamName, type TeamPlayer, type TeamPlayerRole, type TimeOfYear, type Timestamp, addSeasonRQ, authOut as auth, createNewTeamData, createSuccess, dbOut as db, deleteFailed, deleteSuccess, failedCreate, failedFetch, failedUpdate, fetchCurrentUserById, fetchPastPlayerByIdRQ, fetchSeasonRQ, fetchTeamByIdRQ, fromStore, getCurrentUser, init, loginUser, logoutUser, notFound, observeAuthState, registerUser, removeAllPlayersFromTeamRQ, resetPassword, sendVerificationEmail, toStore, tryAgain, updateSeasonRQ, updateSeasonScheduleRQ, updateSuccess, useAddNewTeamToSeason, useAddPlayerToTeam, useAddSeason, useAddTeamToBothViaPlayer, useAddTeamToBothViaUser, useAuth, useFetchCurrentUserById, useFetchCurrentUsers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPastPlayers, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useRemoveTeamFromBothViaPlayer, useRemoveTeamFromBothViaUser, useRemoveTeamFromSeason, useUpdateSeason, useUpdateSeasonSchedule, useUpdateTeamData };
+export { type ActivePlayer, type DateFormat, type DateOrStamp, type DayOfWeek, type Email, FirebaseContext, FirebaseProvider, type Game, type GamePlay, type GamePlayResults, type Holiday, LOGIN_MODES, type Lineup, type MatchWeek, type MatchupId, type Names, type NotDate, type PastPlayer, type Player, type PlayerId, type PlayerLeague, type PlayerSeason, type PlayerTeam, type PoolHall, type RoundRobinSchedule, type RoundRobinScheduleFinished, type Schedule, type Season, type SeasonName, type StampOrInvalid, type TableMatchup, type TableMatchupFinished, type Team, type TeamId, type TeamInfo, type TeamName, type TeamPlayer, type TeamPlayerRole, type TimeOfYear, type Timestamp, addSeasonRQ, authOut as auth, createSuccess, dbOut as db, deleteFailed, deleteSuccess, failedCreate, failedFetch, failedUpdate, fetchPastPlayerById, fetchPlayerById, fetchSeasonRQ, fetchTeamByIdRQ, fromStore, getCurrentUser, init, loginUser, logoutUser, notFound, observeAuthState, registerUser, resetPassword, sendVerificationEmail, toStore, tryAgain, updateSeasonRQ, updateSeasonScheduleRQ, updateSuccess, useAddSeason, useAuth, useFetchAllPastPlayers, useFetchAllPlayers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPlayerById, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useUpdateSeason, useUpdateSeasonSchedule };

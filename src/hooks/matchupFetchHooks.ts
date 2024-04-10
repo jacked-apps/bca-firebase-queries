@@ -26,15 +26,15 @@ import {
   RoundRobinScheduleFinished,
 } from '../types/matchupTypes';
 import { notFound } from '../constants/messages';
-import {useContext} from 'react';
-import {FirebaseContext} from '../FirebaseProvider';
+import { useContext } from 'react';
+import { FirebaseContext } from '../FirebaseProvider';
 
 // ------------------------------
 // 1. HOOKS
 // ------------------------------
 
 export const useFetchRoundRobin = (numberOfTeams: number | undefined) => {
-  const { db } = useContext(FirebaseContext)
+  const { db } = useContext(FirebaseContext);
   return useQuery(
     ['roundRobin', numberOfTeams],
     () => fetchRoundRobinRQ(db!, numberOfTeams),
@@ -45,7 +45,7 @@ export const useFetchRoundRobin = (numberOfTeams: number | undefined) => {
 export const useFetchFinishedRoundRobin = (
   seasonName: SeasonName | undefined
 ) => {
-  const { db } = useContext(FirebaseContext)
+  const { db } = useContext(FirebaseContext);
   return useQuery(
     ['roundRobinFinished', seasonName],
     () => fetchFinishedRoundRobinRQ(db!, seasonName),
