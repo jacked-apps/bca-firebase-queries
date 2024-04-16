@@ -286,13 +286,13 @@ type BarePlayer = Names & {
     phone: string;
     email: Email;
     dob: string;
-    isAdmin: boolean;
 };
 type Player = BarePlayer & {
     id: string;
     leagues: PlayerLeague[];
     seasons: PlayerSeason[];
     teams: PlayerTeam[];
+    isAdmin: boolean;
 };
 type PlayerLeague = {
     id: string;

@@ -47,7 +47,6 @@ export type BarePlayer = Shared.Names & {
   phone: string;
   email: Shared.Email;
   dob: string;
-  isAdmin: boolean;
 };
 
 export type Player = BarePlayer & {
@@ -55,6 +54,7 @@ export type Player = BarePlayer & {
   leagues: PlayerLeague[];
   seasons: PlayerSeason[];
   teams: PlayerTeam[];
+  isAdmin: boolean;
 };
 
 export type PlayerLeague = {

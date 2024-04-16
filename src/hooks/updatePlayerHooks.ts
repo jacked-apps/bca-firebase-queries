@@ -79,6 +79,7 @@ export const createPlayerRQ = async ({
   const playerRef = doc(db!, 'player', userId);
   await setDoc(playerRef, {
     ...playerData,
+    isAdmin: false,
     leagues: [],
     seasons: [],
     teams: [],
