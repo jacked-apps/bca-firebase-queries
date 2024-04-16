@@ -38,9 +38,20 @@ export type PastPlayer = Shared.Names & {
 // };
 
 //
-export type Player = Shared.Names & {
-  id: string;
+
+export type BarePlayer = Shared.Names & {
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  phone: string;
+  email: Shared.Email;
+  dob: string;
   isAdmin: boolean;
+};
+
+export type Player = BarePlayer & {
+  id: string;
   leagues: PlayerLeague[];
   seasons: PlayerSeason[];
   teams: PlayerTeam[];
@@ -52,6 +63,7 @@ export type PlayerLeague = {
   name: string;
   playerHandicap: number;
 };
+
 export type PlayerSeason = {
   leagueId: string;
   name: string;

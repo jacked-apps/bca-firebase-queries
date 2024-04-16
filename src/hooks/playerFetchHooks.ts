@@ -40,6 +40,7 @@ export const useFetchPastPlayerById = (email: Email | undefined) => {
     () => fetchPastPlayerById(db!, email),
     {
       enabled: !!email,
+      retry: 1,
     }
   );
 };

@@ -3,11 +3,19 @@
     "target": "es2016",
     "module": "commonjs",
     "outDir": "./dist",
+    "declaration": true,
+    "declarationDir": "./declarations",
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "rootDir": "./src"
   },
-  "exclude": ["src/hooks/teamToPlayerOperations", "src/hooks/teamUpdateHooks"]
+  "exclude": [
+    "src/hooks/teamToPlayerOperations",
+    "src/hooks/teamUpdateHooks",
+    "dist",
+    "declarations"
+  ]
 }

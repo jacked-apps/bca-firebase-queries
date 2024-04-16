@@ -247,7 +247,8 @@ var useFetchPastPlayerById = (email) => {
     ["pastPlayer", email],
     () => fetchPastPlayerById(db, email),
     {
-      enabled: !!email
+      enabled: !!email,
+      retry: 1
     }
   );
 };

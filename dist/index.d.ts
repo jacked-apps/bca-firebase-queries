@@ -278,9 +278,18 @@ type PastPlayer = Names & {
     seasons?: string[];
     teams?: string[];
 };
-type Player = Names & {
-    id: string;
+type BarePlayer = Names & {
+    address: string;
+    city: string;
+    state: string;
+    zip: string;
+    phone: string;
+    email: Email;
+    dob: string;
     isAdmin: boolean;
+};
+type Player = BarePlayer & {
+    id: string;
     leagues: PlayerLeague[];
     seasons: PlayerSeason[];
     teams: PlayerTeam[];
@@ -593,4 +602,4 @@ declare let dbOut: Firestore$1;
 declare let authOut: Auth$1;
 declare const init: () => void;
 
-export { type ActivePlayer, type DateFormat, type DateOrStamp, type DayOfWeek, type Email, FirebaseContext, FirebaseProvider, type Game, type GamePlay, type GamePlayResults, type Holiday, LOGIN_MODES, type Lineup, type MatchWeek, type MatchupId, type Names, type NotDate, type PastPlayer, type Player, type PlayerId, type PlayerLeague, type PlayerSeason, type PlayerTeam, type PoolHall, type RoundRobinSchedule, type RoundRobinScheduleFinished, type Schedule, type Season, type SeasonName, type StampOrInvalid, type TableMatchup, type TableMatchupFinished, type Team, type TeamId, type TeamInfo, type TeamName, type TeamPlayer, type TeamPlayerRole, type TimeOfYear, type Timestamp, addSeasonRQ, authOut as auth, createSuccess, dbOut as db, deleteFailed, deleteSuccess, failedCreate, failedFetch, failedUpdate, fetchPastPlayerById, fetchPlayerById, fetchSeasonRQ, fetchTeamByIdRQ, fromStore, getCurrentUser, init, loginUser, logoutUser, notFound, observeAuthState, registerUser, resetPassword, sendVerificationEmail, toStore, tryAgain, updateSeasonRQ, updateSeasonScheduleRQ, updateSuccess, useAddSeason, useAuth, useFetchAllPastPlayers, useFetchAllPlayers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPlayerById, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useUpdateSeason, useUpdateSeasonSchedule };
+export { type ActivePlayer, type BarePlayer, type DateFormat, type DateOrStamp, type DayOfWeek, type Email, FirebaseContext, FirebaseProvider, type Game, type GamePlay, type GamePlayResults, type Holiday, LOGIN_MODES, type Lineup, type MatchWeek, type MatchupId, type Names, type NotDate, type PastPlayer, type Player, type PlayerId, type PlayerLeague, type PlayerSeason, type PlayerTeam, type PoolHall, type RoundRobinSchedule, type RoundRobinScheduleFinished, type Schedule, type Season, type SeasonName, type StampOrInvalid, type TableMatchup, type TableMatchupFinished, type Team, type TeamId, type TeamInfo, type TeamName, type TeamPlayer, type TeamPlayerRole, type TimeOfYear, type Timestamp, addSeasonRQ, authOut as auth, createSuccess, dbOut as db, deleteFailed, deleteSuccess, failedCreate, failedFetch, failedUpdate, fetchPastPlayerById, fetchPlayerById, fetchSeasonRQ, fetchTeamByIdRQ, fromStore, getCurrentUser, init, loginUser, logoutUser, notFound, observeAuthState, registerUser, resetPassword, sendVerificationEmail, toStore, tryAgain, updateSeasonRQ, updateSeasonScheduleRQ, updateSuccess, useAddSeason, useAuth, useFetchAllPastPlayers, useFetchAllPlayers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPlayerById, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useUpdateSeason, useUpdateSeasonSchedule };
