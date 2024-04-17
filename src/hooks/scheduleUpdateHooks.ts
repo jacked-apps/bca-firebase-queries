@@ -14,7 +14,6 @@
 import { useMutation } from 'react-query';
 
 // firebase
-import { db } from '../';
 import { updateDoc, doc } from 'firebase/firestore';
 
 //types
@@ -47,8 +46,8 @@ export const updateSeasonScheduleRQ = async ({
   schedule: Schedule;
 }) => {
   //reference to the season document
-  const seasonRef = doc(db, 'seasons', seasonName);
-  await updateDoc(seasonRef, {
-    schedule: schedule,
-  });
+  //const seasonRef = doc(db, 'seasons', seasonName);
+  //await updateDoc(seasonRef, {
+  //  schedule: schedule,
+  //});
 };

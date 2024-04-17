@@ -17,7 +17,6 @@ import { useQuery } from 'react-query';
 import { fetchSeasonRQ } from './seasonFetchHooks';
 
 // firebase
-import { db } from '../';
 import { doc, getDoc } from 'firebase/firestore';
 
 // types
@@ -35,14 +34,14 @@ export const useFetchTeamById = (teamId: string | undefined) => {
 };
 
 export const useFetchTeamsFromSeason = (seasonName: SeasonName | undefined) => {
-  const query = useQuery<Team[], unknown>(
-    ['teamsFromSeason', seasonName],
-    () => fetchTeamsFromSeasonRQ(seasonName),
-    {
-      enabled: !!seasonName,
-    }
-  );
-  return query;
+  // const query = useQuery<Team[], unknown>(
+  //   ['teamsFromSeason', seasonName],
+  //   () => fetchTeamsFromSeasonRQ(seasonName),
+  //   {
+  //     enabled: !!seasonName,
+  //   }
+  // );
+  // return query;
 };
 
 // ------------------------------
@@ -61,19 +60,19 @@ export const useFetchTeamsFromSeason = (seasonName: SeasonName | undefined) => {
 
 export const fetchTeamByIdRQ = async (
   teamId: string | undefined
-): Promise<Team | null> => {
-  if (teamId === undefined) {
-    throw new Error('Team ID not provided');
-  }
-  const teamDoc = doc(db, 'teams', teamId);
-  const teamDocSnapshot = await getDoc(teamDoc);
-  if (teamDocSnapshot.exists()) {
-    const teamData = teamDocSnapshot.data() as Team;
-    teamData.id = teamDocSnapshot.id;
-    return teamData;
-  } else {
-    throw new Error('Team not found');
-  }
+): Promise<Team | null | void> => {
+  // if (teamId === undefined) {
+  //   throw new Error('Team ID not provided');
+  // }
+  // const teamDoc = doc(db, 'teams', teamId);
+  // const teamDocSnapshot = await getDoc(teamDoc);
+  // if (teamDocSnapshot.exists()) {
+  //   const teamData = teamDocSnapshot.data() as Team;
+  //   teamData.id = teamDocSnapshot.id;
+  //   return teamData;
+  // } else {
+  //   throw new Error('Team not found');
+  // }
 };
 
 /**
@@ -89,14 +88,14 @@ export const fetchTeamByIdRQ = async (
 
 const fetchTeamsFromSeasonRQ = async (
   seasonName: SeasonName | undefined
-): Promise<Team[]> => {
-  const seasonDoc = await fetchSeasonRQ(seasonName);
-  if (!seasonDoc.teams || seasonDoc.teams.length === 0) {
-    return [];
-  }
-  const teamsPromises = seasonDoc.teams.map(async (teamId) =>
-    fetchTeamByIdRQ(teamId)
-  );
-  const teams = await Promise.all(teamsPromises);
-  return teams.filter((team) => team !== null) as Team[];
+): Promise<Team[] | void> => {
+  // const seasonDoc = await fetchSeasonRQ(seasonName);
+  // if (!seasonDoc.teams || seasonDoc.teams.length === 0) {
+  //   return [];
+  // }
+  // const teamsPromises = seasonDoc.teams.map(async (teamId) =>
+  //   fetchTeamByIdRQ(teamId)
+  // );
+  // const teams = await Promise.all(teamsPromises);
+  // return teams.filter((team) => team !== null) as Team[];
 };
