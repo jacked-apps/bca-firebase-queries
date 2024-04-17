@@ -7,8 +7,9 @@ import {
   onAuthStateChanged,
   User,
 } from 'firebase/auth';
-import { auth } from './';
-import {Email} from './types/sharedTypes';
+import { Email } from './types/sharedTypes';
+import { useContext } from 'react';
+import { FirebaseContext } from './FirebaseProvider';
 
 /**
  * INDEX TABLE OF CONTENTS
@@ -48,9 +49,10 @@ export const LOGIN_MODES = {
  */
 
 export const registerUser = async (email: Email, password: string) => {
+  const { auth } = useContext(FirebaseContext);
   try {
     const response = await createUserWithEmailAndPassword(
-      auth,
+      auth!,
       email,
       password
     );
@@ -68,8 +70,9 @@ export const registerUser = async (email: Email, password: string) => {
  */
 
 export const loginUser = async (email: Email, password: string) => {
+  const { auth } = useContext(FirebaseContext);
   try {
-    const response = await signInWithEmailAndPassword(auth, email, password);
+    const response = await signInWithEmailAndPassword(auth!, email, password);
     return response.user;
   } catch (error) {
     throw error;
@@ -79,8 +82,6 @@ export const loginUser = async (email: Email, password: string) => {
 /** Get current user
  * @returns {object} User response object
  */
-
-export const getCurrentUser = () => auth.currentUser;
 
 // =======================================
 // 3. Password Functions
@@ -93,8 +94,10 @@ export const getCurrentUser = () => auth.currentUser;
  */
 
 export const resetPassword = async (email: Email) => {
+  const { auth } = useContext(FirebaseContext);
+
   try {
-    await sendPasswordResetEmail(auth, email);
+    await sendPasswordResetEmail(auth!, email);
     alert('Reset Password sent to your Email');
   } catch (error) {
     console.error('Error sending reset password email', error);
@@ -132,8 +135,10 @@ export const sendVerificationEmail = async (user: User) => {
  */
 
 export const logoutUser = async () => {
+  const { auth } = useContext(FirebaseContext);
+
   try {
-    await signOut(auth);
+    await signOut(auth!);
   } catch (error) {
     console.error('Error signing out:', error);
     throw error;
@@ -146,5 +151,7 @@ export const logoutUser = async () => {
  */
 
 export const observeAuthState = (callback: any) => {
-  return onAuthStateChanged(auth, callback);
+  const { auth } = useContext(FirebaseContext);
+
+  return onAuthStateChanged(auth!, callback);
 };

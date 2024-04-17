@@ -25,9 +25,10 @@ import { FirebaseContext } from '../FirebaseProvider';
 // ------------------------------
 // 1. HOOKS
 // ------------------------------
-export const useCreatePlayer = (userId: string, playerData: BarePlayer) => {
+export const useCreatePlayer = () => {
   const { db } = useContext(FirebaseContext);
   const mutation = useMutation(createPlayerRQ);
+  console.log('test');
   const createPlayer = async (userId: string, playerData: BarePlayer) => {
     if (db === null) {
       throw new Error('DB is not initialized');
@@ -76,7 +77,7 @@ export const createPlayerRQ = async ({
   userId: string;
   playerData: BarePlayer;
 }) => {
-  const playerRef = doc(db!, 'player', userId);
+  const playerRef = doc(db!, 'players', userId);
   await setDoc(playerRef, {
     ...playerData,
     isAdmin: false,

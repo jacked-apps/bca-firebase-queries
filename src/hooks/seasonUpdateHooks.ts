@@ -15,7 +15,6 @@ import { useMutation } from 'react-query';
 import { fetchSeasonRQ } from './seasonFetchHooks';
 
 // firebase
-import { db } from '../';
 import { updateDoc, doc, setDoc } from 'firebase/firestore';
 
 // types
@@ -57,8 +56,8 @@ export const addSeasonRQ = async ({
   seasonName: SeasonName;
   seasonData: Season;
 }) => {
-  const seasonRef = doc(db, 'seasons', seasonName);
-  await setDoc(seasonRef, { ...seasonData, seasonCompleted: false });
+  //const seasonRef = doc(db, 'seasons', seasonName);
+  //await setDoc(seasonRef, { ...seasonData, seasonCompleted: false });
 };
 
 /**
@@ -74,8 +73,8 @@ export const updateSeasonRQ = async ({
   seasonName: SeasonName;
   seasonData: Partial<Season>;
 }) => {
-  const seasonRef = doc(db, 'seasons', seasonName);
-  await updateDoc(seasonRef, seasonData);
+  //const seasonRef = doc(db, 'seasons', seasonName);
+  //await updateDoc(seasonRef, seasonData);
 };
 
 const checkSeasonExists = async (seasonName: SeasonName): Promise<boolean> => {

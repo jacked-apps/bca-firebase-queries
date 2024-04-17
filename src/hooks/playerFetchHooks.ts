@@ -15,7 +15,7 @@
 //------------------------
 // IMPORTS
 //------------------------
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import {
   Firestore,
   collection,
@@ -24,9 +24,10 @@ import {
   getDocs,
 } from 'firebase/firestore';
 import { Email } from '../types/sharedTypes';
-import { PastPlayer, Player } from '../types/userTypes';
+import { BarePlayer, PastPlayer, Player } from '../types/userTypes';
 import { useContext } from 'react';
 import { FirebaseContext } from '../FirebaseProvider';
+import { createPlayerRQ } from './updatePlayerHooks';
 
 // ------------------------------
 // 1. HOOKS

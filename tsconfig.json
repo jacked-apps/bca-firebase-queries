@@ -11,11 +11,5 @@
     "strict": true,
     "skipLibCheck": true,
     "rootDir": "./src"
-  },
-  "exclude": [
-    "src/hooks/teamToPlayerOperations",
-    "src/hooks/teamUpdateHooks",
-    "dist",
-    "declarations"
-  ]
+  }
 }

@@ -1,5 +1,3 @@
-import { Firestore as Firestore$1 } from '@firebase/firestore';
-import { Auth as Auth$1 } from '@firebase/auth';
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as react from 'react';
 import { PropsWithChildren } from 'react';
@@ -371,7 +369,7 @@ declare const useFetchSeasons: () => {
     isPreviousData: boolean;
     isRefetching: boolean;
     isStale: boolean;
-    refetch: <TPageData>(options?: (react_query.RefetchOptions & react_query.RefetchQueryFilters<TPageData>) | undefined) => Promise<react_query.QueryObserverResult<Season[], unknown>>;
+    refetch: <TPageData>(options?: (react_query.RefetchOptions & react_query.RefetchQueryFilters<TPageData>) | undefined) => Promise<react_query.QueryObserverResult<void | Season[], unknown>>;
     remove: () => void;
 } | {
     refetchSeasons: () => void;
@@ -395,7 +393,7 @@ declare const useFetchSeasons: () => {
     isPreviousData: boolean;
     isRefetching: boolean;
     isStale: boolean;
-    refetch: <TPageData>(options?: (react_query.RefetchOptions & react_query.RefetchQueryFilters<TPageData>) | undefined) => Promise<react_query.QueryObserverResult<Season[], unknown>>;
+    refetch: <TPageData>(options?: (react_query.RefetchOptions & react_query.RefetchQueryFilters<TPageData>) | undefined) => Promise<react_query.QueryObserverResult<void | Season[], unknown>>;
     remove: () => void;
 } | {
     refetchSeasons: () => void;
@@ -419,11 +417,11 @@ declare const useFetchSeasons: () => {
     isPreviousData: boolean;
     isRefetching: boolean;
     isStale: boolean;
-    refetch: <TPageData>(options?: (react_query.RefetchOptions & react_query.RefetchQueryFilters<TPageData>) | undefined) => Promise<react_query.QueryObserverResult<Season[], unknown>>;
+    refetch: <TPageData>(options?: (react_query.RefetchOptions & react_query.RefetchQueryFilters<TPageData>) | undefined) => Promise<react_query.QueryObserverResult<void | Season[], unknown>>;
     remove: () => void;
 } | {
     refetchSeasons: () => void;
-    data: Season[];
+    data: void | Season[];
     error: unknown;
     isError: true;
     isIdle: false;
@@ -443,11 +441,11 @@ declare const useFetchSeasons: () => {
     isPreviousData: boolean;
     isRefetching: boolean;
     isStale: boolean;
-    refetch: <TPageData>(options?: (react_query.RefetchOptions & react_query.RefetchQueryFilters<TPageData>) | undefined) => Promise<react_query.QueryObserverResult<Season[], unknown>>;
+    refetch: <TPageData>(options?: (react_query.RefetchOptions & react_query.RefetchQueryFilters<TPageData>) | undefined) => Promise<react_query.QueryObserverResult<void | Season[], unknown>>;
     remove: () => void;
 } | {
     refetchSeasons: () => void;
-    data: Season[];
+    data: void | Season[];
     error: null;
     isError: false;
     isIdle: false;
@@ -467,10 +465,10 @@ declare const useFetchSeasons: () => {
     isPreviousData: boolean;
     isRefetching: boolean;
     isStale: boolean;
-    refetch: <TPageData>(options?: (react_query.RefetchOptions & react_query.RefetchQueryFilters<TPageData>) | undefined) => Promise<react_query.QueryObserverResult<Season[], unknown>>;
+    refetch: <TPageData>(options?: (react_query.RefetchOptions & react_query.RefetchQueryFilters<TPageData>) | undefined) => Promise<react_query.QueryObserverResult<void | Season[], unknown>>;
     remove: () => void;
 };
-declare const useFetchSeason: (seasonName: string) => react_query.UseQueryResult<Season, unknown>;
+declare const useFetchSeason: (seasonName: string) => react_query.UseQueryResult<void | Season, unknown>;
 /**
  * Fetches a SINGLE season by name/id from Firestore.
  *
@@ -480,7 +478,7 @@ declare const useFetchSeason: (seasonName: string) => react_query.UseQueryResult
  * If found, returns a Season object from the snapshot data.
  * If not found, throws an error.
  */
-declare const fetchSeasonRQ: (seasonName: SeasonName | undefined) => Promise<Season>;
+declare const fetchSeasonRQ: (seasonName: SeasonName | undefined) => Promise<Season | void>;
 
 type Team = {
     id: TeamId;
@@ -509,8 +507,8 @@ type TeamPlayer = {
     currentUserId: PlayerId;
 };
 
-declare const useFetchTeamById: (teamId: string | undefined) => react_query.UseQueryResult<Team | null, unknown>;
-declare const useFetchTeamsFromSeason: (seasonName: SeasonName | undefined) => react_query.UseQueryResult<Team[], unknown>;
+declare const useFetchTeamById: (teamId: string | undefined) => react_query.UseQueryResult<void | Team | null, unknown>;
+declare const useFetchTeamsFromSeason: (seasonName: SeasonName | undefined) => void;
 /**
  * Fetches a team by ID from Firestore.
  *
@@ -520,7 +518,259 @@ declare const useFetchTeamsFromSeason: (seasonName: SeasonName | undefined) => r
  * If found, returns a Team object from the snapshot data.
  * If not found, throws an error.
  */
-declare const fetchTeamByIdRQ: (teamId: string | undefined) => Promise<Team | null>;
+declare const fetchTeamByIdRQ: (teamId: string | undefined) => Promise<Team | null | void>;
+
+declare const useCreatePlayer: () => {
+    data: undefined;
+    error: null;
+    isError: false;
+    isIdle: true;
+    isLoading: false;
+    isSuccess: false;
+    status: "idle";
+    mutate: react_query.UseMutateFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        playerData: BarePlayer;
+    }, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    isPaused: boolean;
+    variables: {
+        db: Firestore;
+        userId: string;
+        playerData: BarePlayer;
+    } | undefined;
+    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        playerData: BarePlayer;
+    }, unknown>;
+    createPlayer: (userId: string, playerData: BarePlayer) => Promise<void>;
+} | {
+    data: undefined;
+    error: null;
+    isError: false;
+    isIdle: false;
+    isLoading: true;
+    isSuccess: false;
+    status: "loading";
+    mutate: react_query.UseMutateFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        playerData: BarePlayer;
+    }, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    isPaused: boolean;
+    variables: {
+        db: Firestore;
+        userId: string;
+        playerData: BarePlayer;
+    } | undefined;
+    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        playerData: BarePlayer;
+    }, unknown>;
+    createPlayer: (userId: string, playerData: BarePlayer) => Promise<void>;
+} | {
+    data: undefined;
+    error: unknown;
+    isError: true;
+    isIdle: false;
+    isLoading: false;
+    isSuccess: false;
+    status: "error";
+    mutate: react_query.UseMutateFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        playerData: BarePlayer;
+    }, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    isPaused: boolean;
+    variables: {
+        db: Firestore;
+        userId: string;
+        playerData: BarePlayer;
+    } | undefined;
+    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        playerData: BarePlayer;
+    }, unknown>;
+    createPlayer: (userId: string, playerData: BarePlayer) => Promise<void>;
+} | {
+    data: void;
+    error: null;
+    isError: false;
+    isIdle: false;
+    isLoading: false;
+    isSuccess: true;
+    status: "success";
+    mutate: react_query.UseMutateFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        playerData: BarePlayer;
+    }, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    isPaused: boolean;
+    variables: {
+        db: Firestore;
+        userId: string;
+        playerData: BarePlayer;
+    } | undefined;
+    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        playerData: BarePlayer;
+    }, unknown>;
+    createPlayer: (userId: string, playerData: BarePlayer) => Promise<void>;
+};
+declare const useUpdatePlayer: (playerId: string, playerData: Partial<Player>) => {
+    data: undefined;
+    error: null;
+    isError: false;
+    isIdle: true;
+    isLoading: false;
+    isSuccess: false;
+    status: "idle";
+    mutate: react_query.UseMutateFunction<void, unknown, {
+        db: Firestore;
+        playerId: string;
+        playerData: Partial<Player>;
+    }, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    isPaused: boolean;
+    variables: {
+        db: Firestore;
+        playerId: string;
+        playerData: Partial<Player>;
+    } | undefined;
+    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
+        db: Firestore;
+        playerId: string;
+        playerData: Partial<Player>;
+    }, unknown>;
+    updatePlayer: (playerId: string, playerData: Partial<Player>) => Promise<void>;
+} | {
+    data: undefined;
+    error: null;
+    isError: false;
+    isIdle: false;
+    isLoading: true;
+    isSuccess: false;
+    status: "loading";
+    mutate: react_query.UseMutateFunction<void, unknown, {
+        db: Firestore;
+        playerId: string;
+        playerData: Partial<Player>;
+    }, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    isPaused: boolean;
+    variables: {
+        db: Firestore;
+        playerId: string;
+        playerData: Partial<Player>;
+    } | undefined;
+    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
+        db: Firestore;
+        playerId: string;
+        playerData: Partial<Player>;
+    }, unknown>;
+    updatePlayer: (playerId: string, playerData: Partial<Player>) => Promise<void>;
+} | {
+    data: undefined;
+    error: unknown;
+    isError: true;
+    isIdle: false;
+    isLoading: false;
+    isSuccess: false;
+    status: "error";
+    mutate: react_query.UseMutateFunction<void, unknown, {
+        db: Firestore;
+        playerId: string;
+        playerData: Partial<Player>;
+    }, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    isPaused: boolean;
+    variables: {
+        db: Firestore;
+        playerId: string;
+        playerData: Partial<Player>;
+    } | undefined;
+    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
+        db: Firestore;
+        playerId: string;
+        playerData: Partial<Player>;
+    }, unknown>;
+    updatePlayer: (playerId: string, playerData: Partial<Player>) => Promise<void>;
+} | {
+    data: void;
+    error: null;
+    isError: false;
+    isIdle: false;
+    isLoading: false;
+    isSuccess: true;
+    status: "success";
+    mutate: react_query.UseMutateFunction<void, unknown, {
+        db: Firestore;
+        playerId: string;
+        playerData: Partial<Player>;
+    }, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    isPaused: boolean;
+    variables: {
+        db: Firestore;
+        playerId: string;
+        playerData: Partial<Player>;
+    } | undefined;
+    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
+        db: Firestore;
+        playerId: string;
+        playerData: Partial<Player>;
+    }, unknown>;
+    updatePlayer: (playerId: string, playerData: Partial<Player>) => Promise<void>;
+};
+/**
+ * Adds a new player document to Firestore.
+ *
+ * @param db - The Firestore database object.
+ * @param userId - The the id of the user to add.
+ * @param playerData - The player data object to add.
+ *
+ */
+declare const createPlayerRQ: ({ db, userId, playerData, }: {
+    db: Firestore;
+    userId: string;
+    playerData: BarePlayer;
+}) => Promise<void>;
+/**
+ * Updates an existing player document in Firestore.
+ *
+ * @param db - The Firestore database object.
+ * @param playerId - The name of the season to update.
+ * @param playerData - The partial season data to update.
+ */
+declare const updatePlayerRQ: ({ playerId, playerData, db, }: {
+    db: Firestore;
+    playerId: string;
+    playerData: Partial<Player>;
+}) => Promise<void>;
 
 declare const useAuth: () => {
     user: User | null;
@@ -562,7 +812,6 @@ declare const loginUser: (email: Email, password: string) => Promise<User>;
 /** Get current user
  * @returns {object} User response object
  */
-declare const getCurrentUser: () => User | null;
 /** Sends a password email to the provided email address
  * @param {string} email users email
  * @returns {undefined}
@@ -598,8 +847,4 @@ declare const deleteFailed = "Failed to remove ";
 declare const fromStore = " from Firestore.";
 declare const toStore = " to Firestore.";
 
-declare let dbOut: Firestore$1;
-declare let authOut: Auth$1;
-declare const init: () => void;
-
-export { type ActivePlayer, type BarePlayer, type DateFormat, type DateOrStamp, type DayOfWeek, type Email, FirebaseContext, FirebaseProvider, type Game, type GamePlay, type GamePlayResults, type Holiday, LOGIN_MODES, type Lineup, type MatchWeek, type MatchupId, type Names, type NotDate, type PastPlayer, type Player, type PlayerId, type PlayerLeague, type PlayerSeason, type PlayerTeam, type PoolHall, type RoundRobinSchedule, type RoundRobinScheduleFinished, type Schedule, type Season, type SeasonName, type StampOrInvalid, type TableMatchup, type TableMatchupFinished, type Team, type TeamId, type TeamInfo, type TeamName, type TeamPlayer, type TeamPlayerRole, type TimeOfYear, type Timestamp, addSeasonRQ, authOut as auth, createSuccess, dbOut as db, deleteFailed, deleteSuccess, failedCreate, failedFetch, failedUpdate, fetchPastPlayerById, fetchPlayerById, fetchSeasonRQ, fetchTeamByIdRQ, fromStore, getCurrentUser, init, loginUser, logoutUser, notFound, observeAuthState, registerUser, resetPassword, sendVerificationEmail, toStore, tryAgain, updateSeasonRQ, updateSeasonScheduleRQ, updateSuccess, useAddSeason, useAuth, useFetchAllPastPlayers, useFetchAllPlayers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPlayerById, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useUpdateSeason, useUpdateSeasonSchedule };
+export { type ActivePlayer, type BarePlayer, type DateFormat, type DateOrStamp, type DayOfWeek, type Email, FirebaseContext, FirebaseProvider, type Game, type GamePlay, type GamePlayResults, type Holiday, LOGIN_MODES, type Lineup, type MatchWeek, type MatchupId, type Names, type NotDate, type PastPlayer, type Player, type PlayerId, type PlayerLeague, type PlayerSeason, type PlayerTeam, type PoolHall, type RoundRobinSchedule, type RoundRobinScheduleFinished, type Schedule, type Season, type SeasonName, type StampOrInvalid, type TableMatchup, type TableMatchupFinished, type Team, type TeamId, type TeamInfo, type TeamName, type TeamPlayer, type TeamPlayerRole, type TimeOfYear, type Timestamp, addSeasonRQ, createPlayerRQ, createSuccess, deleteFailed, deleteSuccess, failedCreate, failedFetch, failedUpdate, fetchPastPlayerById, fetchPlayerById, fetchSeasonRQ, fetchTeamByIdRQ, fromStore, loginUser, logoutUser, notFound, observeAuthState, registerUser, resetPassword, sendVerificationEmail, toStore, tryAgain, updatePlayerRQ, updateSeasonRQ, updateSeasonScheduleRQ, updateSuccess, useAddSeason, useAuth, useCreatePlayer, useFetchAllPastPlayers, useFetchAllPlayers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPlayerById, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useUpdatePlayer, useUpdateSeason, useUpdateSeasonSchedule };

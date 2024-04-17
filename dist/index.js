@@ -38,11 +38,6 @@ var __async = (__this, __arguments, generator) => {
   });
 };
 
-// src/index.ts
-import { initializeApp as initializeApp2 } from "@firebase/app";
-import { getFirestore as getFirestore2 } from "@firebase/firestore";
-import { getAuth as getAuth2 } from "@firebase/auth";
-
 // src/FirebaseProvider.tsx
 import { createContext, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
@@ -78,14 +73,6 @@ import { useMutation } from "react-query";
 
 // src/hooks/seasonFetchHooks.ts
 import { useQuery, useQueryClient } from "react-query";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc
-} from "firebase/firestore";
 var useFetchSeasons = () => {
   const queryClient = useQueryClient();
   const refetchSeasons = () => {
@@ -97,35 +84,11 @@ var useFetchSeason = (seasonName) => {
   return useQuery(["season", seasonName], () => fetchSeasonRQ(seasonName));
 };
 var fetchSeasonsRQ = () => __async(void 0, null, function* () {
-  const seasonQuery = query(
-    collection(dbOut, "seasons"),
-    where("seasonCompleted", "==", false)
-  );
-  const querySnapshot = yield getDocs(seasonQuery);
-  const seasonsArray = querySnapshot.docs.map((doc7) => {
-    const season = doc7.data();
-    season.id = doc7.id;
-    return season;
-  });
-  return seasonsArray;
 });
 var fetchSeasonRQ = (seasonName) => __async(void 0, null, function* () {
-  if (seasonName === void 0) {
-    throw new Error("Season name/id not provided");
-  }
-  const seasonDoc = doc(dbOut, "seasons", seasonName);
-  const seasonDocSnapshot = yield getDoc(seasonDoc);
-  if (seasonDocSnapshot.exists()) {
-    const season = seasonDocSnapshot.data();
-    season.id = seasonDocSnapshot.id;
-    return season;
-  } else {
-    throw new Error("Season not found");
-  }
 });
 
 // src/hooks/seasonUpdateHooks.ts
-import { updateDoc, doc as doc2, setDoc } from "firebase/firestore";
 var useAddSeason = () => {
   const mutation = useMutation(addSeasonRQ);
   const addSeason = (seasonName, seasonData) => __async(void 0, null, function* () {
@@ -140,20 +103,16 @@ var addSeasonRQ = (_0) => __async(void 0, [_0], function* ({
   seasonName,
   seasonData
 }) {
-  const seasonRef = doc2(dbOut, "seasons", seasonName);
-  yield setDoc(seasonRef, __spreadProps(__spreadValues({}, seasonData), { seasonCompleted: false }));
 });
 var updateSeasonRQ = (_0) => __async(void 0, [_0], function* ({
   seasonName,
   seasonData
 }) {
-  const seasonRef = doc2(dbOut, "seasons", seasonName);
-  yield updateDoc(seasonRef, seasonData);
 });
 
 // src/hooks/matchupFetchHooks.ts
 import { useQuery as useQuery2 } from "react-query";
-import { doc as doc3, getDoc as getDoc2 } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 // src/constants/messages.ts
 var failedFetch = "Failed to fetch ";
@@ -207,8 +166,8 @@ var fetchRoundRobinRQ = (db, numberOfTeams) => __async(void 0, null, function* (
   }
   const adjustedTeams = adjustNumberOfTeams(numberOfTeams);
   const scheduleName = `scheduleFor${adjustedTeams}Teams`;
-  const scheduleRef = doc3(db, "roundRobinSchedules", scheduleName);
-  const scheduleDoc = yield getDoc2(scheduleRef);
+  const scheduleRef = doc(db, "roundRobinSchedules", scheduleName);
+  const scheduleDoc = yield getDoc(scheduleRef);
   if (scheduleDoc.exists()) {
     return scheduleDoc.data();
   } else {
@@ -221,8 +180,8 @@ var fetchFinishedRoundRobinRQ = (db, seasonId) => __async(void 0, null, function
   if (seasonId === void 0) {
     throw new Error("Season ID not provided");
   }
-  const scheduleRef = doc3(db, "finishedRoundRobinSchedules", seasonId);
-  const scheduleDoc = yield getDoc2(scheduleRef);
+  const scheduleRef = doc(db, "finishedRoundRobinSchedules", seasonId);
+  const scheduleDoc = yield getDoc(scheduleRef);
   if (scheduleDoc.exists()) {
     return scheduleDoc.data();
   } else {
@@ -235,10 +194,10 @@ var fetchFinishedRoundRobinRQ = (db, seasonId) => __async(void 0, null, function
 // src/hooks/playerFetchHooks.ts
 import { useQuery as useQuery3 } from "react-query";
 import {
-  collection as collection2,
-  doc as doc4,
-  getDoc as getDoc3,
-  getDocs as getDocs2
+  collection,
+  doc as doc2,
+  getDoc as getDoc2,
+  getDocs
 } from "firebase/firestore";
 import { useContext as useContext2 } from "react";
 var useFetchPastPlayerById = (email) => {
@@ -270,8 +229,8 @@ var fetchPastPlayerById = (db, email) => __async(void 0, null, function* () {
   if (email === void 0) {
     throw new Error("Player ID not provided");
   }
-  const playerDoc = doc4(db, "pastPlayers", email);
-  const playerDocSnapshot = yield getDoc3(playerDoc);
+  const playerDoc = doc2(db, "pastPlayers", email);
+  const playerDocSnapshot = yield getDoc2(playerDoc);
   if (playerDocSnapshot.exists()) {
     return __spreadValues({
       id: playerDocSnapshot.id
@@ -281,12 +240,12 @@ var fetchPastPlayerById = (db, email) => __async(void 0, null, function* () {
   }
 });
 var fetchAllPastPlayers = (db) => __async(void 0, null, function* () {
-  const querySnapshot = yield getDocs2(collection2(db, "pastPlayers"));
+  const querySnapshot = yield getDocs(collection(db, "pastPlayers"));
   const playersData = [];
-  querySnapshot.forEach((doc7) => {
-    const playerData = doc7.data();
+  querySnapshot.forEach((doc4) => {
+    const playerData = doc4.data();
     playersData.push(__spreadProps(__spreadValues({}, playerData), {
-      id: doc7.id
+      id: doc4.id
     }));
   });
   return playersData;
@@ -295,8 +254,8 @@ var fetchPlayerById = (db, id) => __async(void 0, null, function* () {
   if (id === void 0) {
     throw new Error("Player ID not provided");
   }
-  const userDoc = doc4(db, "players", id);
-  const userDocSnapshot = yield getDoc3(userDoc);
+  const userDoc = doc2(db, "players", id);
+  const userDocSnapshot = yield getDoc2(userDoc);
   if (userDocSnapshot.exists()) {
     return __spreadValues({
       id: userDocSnapshot.id
@@ -306,84 +265,94 @@ var fetchPlayerById = (db, id) => __async(void 0, null, function* () {
   }
 });
 var fetchAllPlayers = (db) => __async(void 0, null, function* () {
-  const querySnapshot = yield getDocs2(collection2(db, "players"));
+  const querySnapshot = yield getDocs(collection(db, "players"));
   const playersData = [];
-  querySnapshot.forEach((doc7) => {
-    const playerData = doc7.data();
+  querySnapshot.forEach((doc4) => {
+    const playerData = doc4.data();
     playersData.push(__spreadProps(__spreadValues({}, playerData), {
-      id: doc7.id
+      id: doc4.id
     }));
   });
   return playersData;
 });
 
 // src/hooks/scheduleUpdateHooks.ts
-import { useMutation as useMutation2 } from "react-query";
-import { updateDoc as updateDoc2, doc as doc5 } from "firebase/firestore";
+import { useMutation as useMutation3 } from "react-query";
 var useUpdateSeasonSchedule = () => {
-  return useMutation2(updateSeasonScheduleRQ);
+  return useMutation3(updateSeasonScheduleRQ);
 };
 var updateSeasonScheduleRQ = (_0) => __async(void 0, [_0], function* ({
   seasonName,
   schedule
 }) {
-  const seasonRef = doc5(dbOut, "seasons", seasonName);
-  yield updateDoc2(seasonRef, {
-    schedule
-  });
 });
 
 // src/hooks/teamFetchHooks.ts
 import { useQuery as useQuery4 } from "react-query";
-import { doc as doc6, getDoc as getDoc4 } from "firebase/firestore";
 var useFetchTeamById = (teamId) => {
   return useQuery4(["team", teamId], () => fetchTeamByIdRQ(teamId), {
     enabled: teamId !== void 0
   });
 };
 var useFetchTeamsFromSeason = (seasonName) => {
-  const query2 = useQuery4(
-    ["teamsFromSeason", seasonName],
-    () => fetchTeamsFromSeasonRQ(seasonName),
-    {
-      enabled: !!seasonName
-    }
-  );
-  return query2;
 };
 var fetchTeamByIdRQ = (teamId) => __async(void 0, null, function* () {
-  if (teamId === void 0) {
-    throw new Error("Team ID not provided");
-  }
-  const teamDoc = doc6(dbOut, "teams", teamId);
-  const teamDocSnapshot = yield getDoc4(teamDoc);
-  if (teamDocSnapshot.exists()) {
-    const teamData = teamDocSnapshot.data();
-    teamData.id = teamDocSnapshot.id;
-    return teamData;
-  } else {
-    throw new Error("Team not found");
-  }
 });
-var fetchTeamsFromSeasonRQ = (seasonName) => __async(void 0, null, function* () {
-  const seasonDoc = yield fetchSeasonRQ(seasonName);
-  if (!seasonDoc.teams || seasonDoc.teams.length === 0) {
-    return [];
-  }
-  const teamsPromises = seasonDoc.teams.map(
-    (teamId) => __async(void 0, null, function* () {
-      return fetchTeamByIdRQ(teamId);
-    })
-  );
-  const teams = yield Promise.all(teamsPromises);
-  return teams.filter((team) => team !== null);
+
+// src/hooks/updatePlayerHooks.ts
+import { useMutation as useMutation4 } from "react-query";
+import { updateDoc, doc as doc3, setDoc } from "firebase/firestore";
+import { useContext as useContext3 } from "react";
+var useCreatePlayer = () => {
+  const { db } = useContext3(FirebaseContext);
+  const mutation = useMutation4(createPlayerRQ);
+  console.log("test");
+  const createPlayer = (userId, playerData) => __async(void 0, null, function* () {
+    if (db === null) {
+      throw new Error("DB is not initialized");
+    }
+    mutation.mutate({ db, userId, playerData });
+  });
+  return __spreadValues({ createPlayer }, mutation);
+};
+var useUpdatePlayer = (playerId, playerData) => {
+  const { db } = useContext3(FirebaseContext);
+  const mutation = useMutation4(updatePlayerRQ);
+  const updatePlayer = (playerId2, playerData2) => __async(void 0, null, function* () {
+    if (db === null) {
+      throw new Error("DB is not initialized");
+    }
+    mutation.mutate({ db, playerId: playerId2, playerData: playerData2 });
+  });
+  return __spreadValues({ updatePlayer }, mutation);
+};
+var createPlayerRQ = (_0) => __async(void 0, [_0], function* ({
+  db,
+  userId,
+  playerData
+}) {
+  const playerRef = doc3(db, "players", userId);
+  yield setDoc(playerRef, __spreadProps(__spreadValues({}, playerData), {
+    isAdmin: false,
+    leagues: [],
+    seasons: [],
+    teams: []
+  }));
+});
+var updatePlayerRQ = (_0) => __async(void 0, [_0], function* ({
+  playerId,
+  playerData,
+  db
+}) {
+  const playerRef = doc3(db, "player", playerId);
+  yield updateDoc(playerRef, playerData);
 });
 
 // src/hooks/useAuth.ts
-import { useState as useState2, useEffect as useEffect2, useContext as useContext3 } from "react";
+import { useState as useState2, useEffect as useEffect2, useContext as useContext4 } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 var useAuth = () => {
-  const { auth } = useContext3(FirebaseContext);
+  const { auth } = useContext4(FirebaseContext);
   const [user, setUser] = useState2(null);
   useEffect2(() => {
     if (!auth) {
@@ -405,15 +374,17 @@ import {
   signOut,
   onAuthStateChanged as onAuthStateChanged2
 } from "firebase/auth";
+import { useContext as useContext5 } from "react";
 var LOGIN_MODES = {
   LOGIN: "login",
   REGISTER: "register",
   RESET_PASSWORD: "resetPassword"
 };
 var registerUser = (email, password) => __async(void 0, null, function* () {
+  const { auth } = useContext5(FirebaseContext);
   try {
     const response = yield createUserWithEmailAndPassword(
-      authOut,
+      auth,
       email,
       password
     );
@@ -423,17 +394,18 @@ var registerUser = (email, password) => __async(void 0, null, function* () {
   }
 });
 var loginUser = (email, password) => __async(void 0, null, function* () {
+  const { auth } = useContext5(FirebaseContext);
   try {
-    const response = yield signInWithEmailAndPassword(authOut, email, password);
+    const response = yield signInWithEmailAndPassword(auth, email, password);
     return response.user;
   } catch (error) {
     throw error;
   }
 });
-var getCurrentUser = () => authOut.currentUser;
 var resetPassword = (email) => __async(void 0, null, function* () {
+  const { auth } = useContext5(FirebaseContext);
   try {
-    yield sendPasswordResetEmail(authOut, email);
+    yield sendPasswordResetEmail(auth, email);
     alert("Reset Password sent to your Email");
   } catch (error) {
     console.error("Error sending reset password email", error);
@@ -450,44 +422,25 @@ var sendVerificationEmail = (user) => __async(void 0, null, function* () {
   }
 });
 var logoutUser = () => __async(void 0, null, function* () {
+  const { auth } = useContext5(FirebaseContext);
   try {
-    yield signOut(authOut);
+    yield signOut(auth);
   } catch (error) {
     console.error("Error signing out:", error);
     throw error;
   }
 });
 var observeAuthState = (callback) => {
-  return onAuthStateChanged2(authOut, callback);
-};
-
-// src/index.ts
-var firebaseConfig = {
-  /* cSpell:disable */
-  apiKey: "AIzaSyC5MvMfEeebh3XxyzYSD3qWpFR0aAAXSHM",
-  authDomain: "expo-bca-app.firebaseapp.com",
-  databaseURL: "https://expo-bca-app-default-rtdb.firebaseio.com",
-  projectId: "expo-bca-app",
-  storageBucket: "expo-bca-app.appspot.com",
-  messagingSenderId: "248104656807",
-  appId: "1:248104656807:web:853cad16b8fa38dbee2082",
-  measurementId: "G-EL12CDVSCR"
-};
-var dbOut;
-var authOut;
-var init = () => {
-  const app = initializeApp2(firebaseConfig);
-  dbOut = getFirestore2(app);
-  authOut = getAuth2(app);
+  const { auth } = useContext5(FirebaseContext);
+  return onAuthStateChanged2(auth, callback);
 };
 export {
   FirebaseContext,
   FirebaseProvider,
   LOGIN_MODES,
   addSeasonRQ,
-  authOut as auth,
+  createPlayerRQ,
   createSuccess,
-  dbOut as db,
   deleteFailed,
   deleteSuccess,
   failedCreate,
@@ -498,8 +451,6 @@ export {
   fetchSeasonRQ,
   fetchTeamByIdRQ,
   fromStore,
-  getCurrentUser,
-  init,
   loginUser,
   logoutUser,
   notFound,
@@ -509,11 +460,13 @@ export {
   sendVerificationEmail,
   toStore,
   tryAgain,
+  updatePlayerRQ,
   updateSeasonRQ,
   updateSeasonScheduleRQ,
   updateSuccess,
   useAddSeason,
   useAuth,
+  useCreatePlayer,
   useFetchAllPastPlayers,
   useFetchAllPlayers,
   useFetchFinishedRoundRobin,
@@ -524,6 +477,7 @@ export {
   useFetchSeasons,
   useFetchTeamById,
   useFetchTeamsFromSeason,
+  useUpdatePlayer,
   useUpdateSeason,
   useUpdateSeasonSchedule
 };
