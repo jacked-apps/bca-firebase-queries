@@ -547,7 +547,7 @@ declare const useCreatePlayer: () => {
         userId: string;
         playerData: BarePlayer;
     }, unknown>;
-    createPlayer: (userId: string, playerData: BarePlayer) => Promise<void>;
+    createPlayer: (userId: string, playerData: BarePlayer, onCreatePlayerSuccess?: () => void) => Promise<void>;
 } | {
     data: undefined;
     error: null;
@@ -575,7 +575,7 @@ declare const useCreatePlayer: () => {
         userId: string;
         playerData: BarePlayer;
     }, unknown>;
-    createPlayer: (userId: string, playerData: BarePlayer) => Promise<void>;
+    createPlayer: (userId: string, playerData: BarePlayer, onCreatePlayerSuccess?: () => void) => Promise<void>;
 } | {
     data: undefined;
     error: unknown;
@@ -603,7 +603,7 @@ declare const useCreatePlayer: () => {
         userId: string;
         playerData: BarePlayer;
     }, unknown>;
-    createPlayer: (userId: string, playerData: BarePlayer) => Promise<void>;
+    createPlayer: (userId: string, playerData: BarePlayer, onCreatePlayerSuccess?: () => void) => Promise<void>;
 } | {
     data: void;
     error: null;
@@ -631,7 +631,7 @@ declare const useCreatePlayer: () => {
         userId: string;
         playerData: BarePlayer;
     }, unknown>;
-    createPlayer: (userId: string, playerData: BarePlayer) => Promise<void>;
+    createPlayer: (userId: string, playerData: BarePlayer, onCreatePlayerSuccess?: () => void) => Promise<void>;
 };
 declare const useUpdatePlayer: (playerId: string, playerData: Partial<Player>) => {
     data: undefined;

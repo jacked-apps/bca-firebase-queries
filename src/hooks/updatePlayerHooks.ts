@@ -32,20 +32,33 @@ import { FirebaseContext } from '../FirebaseProvider';
 // ------------------------------
 // 1. HOOKS
 // ------------------------------
+
 export const useCreatePlayer = () => {
+  // get database and mutation
   const { db } = useContext(FirebaseContext);
   const mutation = useMutation(createPlayerRQ);
-  console.log('test');
+
+  // createPlayer function
   const createPlayer = async (
     userId: string,
     playerData: BarePlayer,
-    options?: { onSuccess?: () => void }
+    onCreatePlayerSuccess?: () => void
   ) => {
+    // insure database is initialized
     if (db === null) {
       throw new Error('DB is not initialized');
     }
-    mutation.mutate({ db, userId, playerData });
+    // call mutation
+    mutation.mutate(
+      { db, userId, playerData },
+      {
+        onSuccess: () => {
+          onCreatePlayerSuccess?.();
+        },
+      }
+    );
   };
+
   return { createPlayer, ...mutation };
 };
 

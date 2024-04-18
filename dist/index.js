@@ -301,17 +301,27 @@ var fetchTeamByIdRQ = (teamId) => __async(void 0, null, function* () {
 
 // src/hooks/updatePlayerHooks.ts
 import { useMutation as useMutation4 } from "react-query";
-import { updateDoc, doc as doc3, setDoc } from "firebase/firestore";
+import {
+  updateDoc,
+  doc as doc3,
+  setDoc
+} from "firebase/firestore";
 import { useContext as useContext3 } from "react";
 var useCreatePlayer = () => {
   const { db } = useContext3(FirebaseContext);
   const mutation = useMutation4(createPlayerRQ);
-  console.log("test");
-  const createPlayer = (userId, playerData) => __async(void 0, null, function* () {
+  const createPlayer = (userId, playerData, onCreatePlayerSuccess) => __async(void 0, null, function* () {
     if (db === null) {
       throw new Error("DB is not initialized");
     }
-    mutation.mutate({ db, userId, playerData });
+    mutation.mutate(
+      { db, userId, playerData },
+      {
+        onSuccess: () => {
+          onCreatePlayerSuccess == null ? void 0 : onCreatePlayerSuccess();
+        }
+      }
+    );
   });
   return __spreadValues({ createPlayer }, mutation);
 };
