@@ -79,14 +79,14 @@ export const addGamesToPlayerRQ = async ({
   gamesArray: GameOnPlayer[];
 }) => {
   const batch = writeBatch(db);
+  const playerRef = doc(db, 'players', userId);
   gamesArray.forEach((gameObject) => {
-    const gameCollection = `${gameObject.game.replace(/\s+/g, '')}Games`;
-    const playerGamesRef = collection(
-      db,
-      `players/${userId}/${gameCollection}`
-    );
-    const gameRef = doc(playerGamesRef);
-    batch.set(gameRef, gameObject);
+    const gameCollectionName = `${gameObject.game.replace(/\s+/g, '')}Games`;
+    const gamesCollection = collection(playerRef, gameCollectionName);
+    const newGameRef = doc(gamesCollection);
+    batch.set(newGameRef, gameObject);
   });
-  await batch.commit();
+  await batch.commit().catch((error) => {
+    throw error;
+  });
 };

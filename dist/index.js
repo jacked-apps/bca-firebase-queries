@@ -135,16 +135,16 @@ var addGamesToPlayerRQ = (_0) => __async(void 0, [_0], function* ({
   gamesArray
 }) {
   const batch = writeBatch(db);
+  const playerRef = doc(db, "players", userId);
   gamesArray.forEach((gameObject) => {
-    const gameCollection = `${gameObject.game.replace(/\s+/g, "")}Games`;
-    const playerGamesRef = collection(
-      db,
-      `players/${userId}/${gameCollection}`
-    );
-    const gameRef = doc(playerGamesRef);
-    batch.set(gameRef, gameObject);
+    const gameCollectionName = `${gameObject.game.replace(/\s+/g, "")}Games`;
+    const gamesCollection = collection(playerRef, gameCollectionName);
+    const newGameRef = doc(gamesCollection);
+    batch.set(newGameRef, gameObject);
   });
-  yield batch.commit();
+  yield batch.commit().catch((error) => {
+    throw error;
+  });
 });
 
 // src/hooks/matchupFetchHooks.ts
