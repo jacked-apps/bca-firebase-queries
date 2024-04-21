@@ -226,6 +226,15 @@ type ActivePlayer = Names & {
 type GamePlay = {
     [gameKey: string]: GamePlayResults;
 };
+type GameOnPlayer = {
+    break: boolean;
+    createdAt: Timestamp$1;
+    opponentId: string;
+    seasonId: SeasonName;
+    value: 1 | -1;
+    week: number;
+    game: Game;
+};
 type GamePlayResults = {
     breaker: PlayerId;
     racker: PlayerId;
@@ -252,8 +261,32 @@ type RoundRobinScheduleFinished = {
     [week: string]: TableMatchupFinished[];
 };
 
-declare const useFetchRoundRobin: (numberOfTeams: number | undefined) => react_query.UseQueryResult<RoundRobinSchedule | null, unknown>;
-declare const useFetchFinishedRoundRobin: (seasonName: SeasonName | undefined) => react_query.UseQueryResult<RoundRobinScheduleFinished | null, unknown>;
+type Team = {
+    id: TeamId;
+    teamName: string;
+    seasonId: SeasonName;
+    players: {
+        captain: TeamPlayer;
+        player2: TeamPlayer;
+        player3: TeamPlayer;
+        player4: TeamPlayer;
+        player5: TeamPlayer;
+    };
+    wins: number;
+    losses: number;
+    points: number;
+};
+type TeamPlayerRole = 'captain' | 'player2' | 'player3' | 'player4' | 'player5';
+type TeamPlayer = {
+    firstName: string;
+    lastName: string;
+    nickname: string;
+    email?: Email;
+    totalWins: number;
+    totalLosses: number;
+    pastPlayerId: Email;
+    currentUserId: PlayerId;
+};
 
 type PastPlayer = Names & {
     id: Email;
@@ -265,16 +298,19 @@ type PastPlayer = Names & {
     state: string;
     zip: string;
     phone: string;
-    stats: {
-        [dateString: string]: {
-            wins: number;
-            losses: number;
-            seasonName: SeasonName;
-            seasonEnd: Timestamp;
-        };
-    };
+    stats: PastPlayerStats;
     seasons?: string[];
     teams?: string[];
+};
+type PastPlayerStats = {
+    [dateString: string]: PastPlayerSeasonStat;
+};
+type PastPlayerSeasonStat = {
+    wins: number;
+    losses: number;
+    seasonName: SeasonName;
+    seasonEnd?: Timestamp;
+    game: Game;
 };
 type BarePlayer = Names & {
     address: string;
@@ -310,6 +346,138 @@ type PlayerTeam = {
     teamId: string;
     name: string;
 };
+
+declare const useAddGamesToPlayer: () => {
+    data: undefined;
+    error: null;
+    isError: false;
+    isIdle: true;
+    isLoading: false;
+    isSuccess: false;
+    status: "idle";
+    mutate: react_query.UseMutateFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        gamesArray: GameOnPlayer[];
+    }, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    isPaused: boolean;
+    variables: {
+        db: Firestore;
+        userId: string;
+        gamesArray: GameOnPlayer[];
+    } | undefined;
+    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        gamesArray: GameOnPlayer[];
+    }, unknown>;
+    addGamesToPlayer: (userId: string, gamesArray: GameOnPlayer[]) => Promise<void>;
+} | {
+    data: undefined;
+    error: null;
+    isError: false;
+    isIdle: false;
+    isLoading: true;
+    isSuccess: false;
+    status: "loading";
+    mutate: react_query.UseMutateFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        gamesArray: GameOnPlayer[];
+    }, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    isPaused: boolean;
+    variables: {
+        db: Firestore;
+        userId: string;
+        gamesArray: GameOnPlayer[];
+    } | undefined;
+    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        gamesArray: GameOnPlayer[];
+    }, unknown>;
+    addGamesToPlayer: (userId: string, gamesArray: GameOnPlayer[]) => Promise<void>;
+} | {
+    data: undefined;
+    error: unknown;
+    isError: true;
+    isIdle: false;
+    isLoading: false;
+    isSuccess: false;
+    status: "error";
+    mutate: react_query.UseMutateFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        gamesArray: GameOnPlayer[];
+    }, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    isPaused: boolean;
+    variables: {
+        db: Firestore;
+        userId: string;
+        gamesArray: GameOnPlayer[];
+    } | undefined;
+    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        gamesArray: GameOnPlayer[];
+    }, unknown>;
+    addGamesToPlayer: (userId: string, gamesArray: GameOnPlayer[]) => Promise<void>;
+} | {
+    data: void;
+    error: null;
+    isError: false;
+    isIdle: false;
+    isLoading: false;
+    isSuccess: true;
+    status: "success";
+    mutate: react_query.UseMutateFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        gamesArray: GameOnPlayer[];
+    }, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    isPaused: boolean;
+    variables: {
+        db: Firestore;
+        userId: string;
+        gamesArray: GameOnPlayer[];
+    } | undefined;
+    mutateAsync: react_query.UseMutateAsyncFunction<void, unknown, {
+        db: Firestore;
+        userId: string;
+        gamesArray: GameOnPlayer[];
+    }, unknown>;
+    addGamesToPlayer: (userId: string, gamesArray: GameOnPlayer[]) => Promise<void>;
+};
+/**
+ * Adds the provided array of GameOnPlayer objects to the
+ * current user's document in Firestore by creating a batch
+ * write. Writes the games to a collection named after the
+ * game with spaces removed.
+ *
+ * @param db - The Firestore database instance
+ * @param userId - The id of the user document to update
+ * @param gamesArray - The array of GameOnPlayer objects to add
+ */
+declare const addGamesToPlayerRQ: ({ db, userId, gamesArray, }: {
+    db: Firestore;
+    userId: string;
+    gamesArray: GameOnPlayer[];
+}) => Promise<void>;
+
+declare const useFetchRoundRobin: (numberOfTeams: number | undefined) => react_query.UseQueryResult<RoundRobinSchedule | null, unknown>;
+declare const useFetchFinishedRoundRobin: (seasonName: SeasonName | undefined) => react_query.UseQueryResult<RoundRobinScheduleFinished | null, unknown>;
 
 declare const useFetchPastPlayerById: (email: Email | undefined) => react_query.UseQueryResult<PastPlayer | null, unknown>;
 declare const useFetchAllPastPlayers: () => react_query.UseQueryResult<PastPlayer[], unknown>;
@@ -479,33 +647,6 @@ declare const useFetchSeason: (seasonName: string) => react_query.UseQueryResult
  * If not found, throws an error.
  */
 declare const fetchSeasonRQ: (seasonName: SeasonName | undefined) => Promise<Season | void>;
-
-type Team = {
-    id: TeamId;
-    teamName: string;
-    seasonId: SeasonName;
-    players: {
-        captain: TeamPlayer;
-        player2: TeamPlayer;
-        player3: TeamPlayer;
-        player4: TeamPlayer;
-        player5: TeamPlayer;
-    };
-    wins: number;
-    losses: number;
-    points: number;
-};
-type TeamPlayerRole = 'captain' | 'player2' | 'player3' | 'player4' | 'player5';
-type TeamPlayer = {
-    firstName: string;
-    lastName: string;
-    nickname: string;
-    email?: Email;
-    totalWins: number;
-    totalLosses: number;
-    pastPlayerId: Email;
-    currentUserId: PlayerId;
-};
 
 declare const useFetchTeamById: (teamId: string | undefined) => react_query.UseQueryResult<void | Team | null, unknown>;
 declare const useFetchTeamsFromSeason: (seasonName: SeasonName | undefined) => void;
@@ -847,4 +988,4 @@ declare const deleteFailed = "Failed to remove ";
 declare const fromStore = " from Firestore.";
 declare const toStore = " to Firestore.";
 
-export { type ActivePlayer, type BarePlayer, type DateFormat, type DateOrStamp, type DayOfWeek, type Email, FirebaseContext, FirebaseProvider, type Game, type GamePlay, type GamePlayResults, type Holiday, LOGIN_MODES, type Lineup, type MatchWeek, type MatchupId, type Names, type NotDate, type PastPlayer, type Player, type PlayerId, type PlayerLeague, type PlayerSeason, type PlayerTeam, type PoolHall, type RoundRobinSchedule, type RoundRobinScheduleFinished, type Schedule, type Season, type SeasonName, type StampOrInvalid, type TableMatchup, type TableMatchupFinished, type Team, type TeamId, type TeamInfo, type TeamName, type TeamPlayer, type TeamPlayerRole, type TimeOfYear, type Timestamp, addSeasonRQ, createPlayerRQ, createSuccess, deleteFailed, deleteSuccess, failedCreate, failedFetch, failedUpdate, fetchPastPlayerById, fetchPlayerById, fetchSeasonRQ, fetchTeamByIdRQ, fromStore, loginUser, logoutUser, notFound, observeAuthState, registerUser, resetPassword, sendVerificationEmail, toStore, tryAgain, updatePlayerRQ, updateSeasonRQ, updateSeasonScheduleRQ, updateSuccess, useAddSeason, useAuth, useCreatePlayer, useFetchAllPastPlayers, useFetchAllPlayers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPlayerById, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useUpdatePlayer, useUpdateSeason, useUpdateSeasonSchedule };
+export { type ActivePlayer, type BarePlayer, type DateFormat, type DateOrStamp, type DayOfWeek, type Email, FirebaseContext, FirebaseProvider, type Game, type GameOnPlayer, type GamePlay, type GamePlayResults, type Holiday, LOGIN_MODES, type Lineup, type MatchWeek, type MatchupId, type Names, type NotDate, type PastPlayer, type PastPlayerSeasonStat, type PastPlayerStats, type Player, type PlayerId, type PlayerLeague, type PlayerSeason, type PlayerTeam, type PoolHall, type RoundRobinSchedule, type RoundRobinScheduleFinished, type Schedule, type Season, type SeasonName, type StampOrInvalid, type TableMatchup, type TableMatchupFinished, type Team, type TeamId, type TeamInfo, type TeamName, type TeamPlayer, type TeamPlayerRole, type TimeOfYear, type Timestamp, addGamesToPlayerRQ, addSeasonRQ, createPlayerRQ, createSuccess, deleteFailed, deleteSuccess, failedCreate, failedFetch, failedUpdate, fetchPastPlayerById, fetchPlayerById, fetchSeasonRQ, fetchTeamByIdRQ, fromStore, loginUser, logoutUser, notFound, observeAuthState, registerUser, resetPassword, sendVerificationEmail, toStore, tryAgain, updatePlayerRQ, updateSeasonRQ, updateSeasonScheduleRQ, updateSuccess, useAddGamesToPlayer, useAddSeason, useAuth, useCreatePlayer, useFetchAllPastPlayers, useFetchAllPlayers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPlayerById, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useUpdatePlayer, useUpdateSeason, useUpdateSeasonSchedule };

@@ -1,6 +1,7 @@
 export { FirebaseProvider, FirebaseContext } from './FirebaseProvider';
 
 export * from './hooks/seasonUpdateHooks';
+export * from './hooks/gameHooks';
 export * from './hooks/matchupFetchHooks';
 export * from './hooks/playerFetchHooks';
 export * from './hooks/scheduleUpdateHooks';
@@ -14,3 +15,4 @@ export { useAuth } from './hooks/useAuth';
 export * from './Auth';
 export * from './types';
 export * from './constants/messages';
+//export * from './constants/functions';
