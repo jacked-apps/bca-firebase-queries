@@ -13,16 +13,21 @@ export type PastPlayer = Shared.Names & {
   zip: string; // That cities zip code
   phone: string; // The players phone number
   // archived wins and losses for the last 3 seasons if available
-  stats: {
-    [dateString: string]: {
-      wins: number;
-      losses: number;
-      seasonName: Shared.SeasonName;
-      seasonEnd: Shared.Timestamp;
-    };
-  };
+  stats: PastPlayerStats;
   seasons?: string[];
   teams?: string[];
+};
+
+export type PastPlayerStats = {
+  [dateString: string]: PastPlayerSeasonStat;
+};
+
+export type PastPlayerSeasonStat = {
+  wins: number;
+  losses: number;
+  seasonName: Shared.SeasonName;
+  seasonEnd?: Shared.Timestamp;
+  game: Shared.Game;
 };
 
 // Represents a player that has logged into the app with minimal information

@@ -1,3 +1,4 @@
+import { Timestamp } from 'firebase/firestore';
 import * as Shared from './sharedTypes';
 
 // Represents a document in the matchWeek collection
@@ -57,6 +58,16 @@ export type GamePlay = {
   // gameKey should be game1, game2 etc. to game18,
   // after game18  (if match is tied) gameKey should be tieBreakGame1, tieBreakGame2, tieBreakGame3
   // will need 18 to 21 games here to decide the match
+};
+
+export type GameOnPlayer = {
+  break: boolean;
+  createdAt: Timestamp;
+  opponentId: string;
+  seasonId: Shared.SeasonName;
+  value: 1 | -1;
+  week: number;
+  game: Shared.Game;
 };
 
 // Embedded on GamePlay

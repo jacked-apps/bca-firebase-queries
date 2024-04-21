@@ -15,7 +15,14 @@ import { useMutation } from 'react-query';
 
 // firebase
 
-import { updateDoc, doc, setDoc, Firestore } from 'firebase/firestore';
+import {
+  updateDoc,
+  doc,
+  setDoc,
+  Firestore,
+  collection,
+  serverTimestamp,
+} from 'firebase/firestore';
 import { BarePlayer, Player } from '../types';
 import { useContext } from 'react';
 import { FirebaseContext } from '../FirebaseProvider';
@@ -25,16 +32,33 @@ import { FirebaseContext } from '../FirebaseProvider';
 // ------------------------------
 // 1. HOOKS
 // ------------------------------
+
 export const useCreatePlayer = () => {
+  // get database and mutation
   const { db } = useContext(FirebaseContext);
   const mutation = useMutation(createPlayerRQ);
-  console.log('test');
-  const createPlayer = async (userId: string, playerData: BarePlayer) => {
+
+  // createPlayer function
+  const createPlayer = async (
+    userId: string,
+    playerData: BarePlayer,
+    onCreatePlayerSuccess?: () => void
+  ) => {
+    // insure database is initialized
     if (db === null) {
       throw new Error('DB is not initialized');
     }
-    mutation.mutate({ db, userId, playerData });
+    // call mutation
+    mutation.mutate(
+      { db, userId, playerData },
+      {
+        onSuccess: () => {
+          onCreatePlayerSuccess?.();
+        },
+      }
+    );
   };
+
   return { createPlayer, ...mutation };
 };
 

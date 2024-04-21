@@ -110,9 +110,46 @@ var updateSeasonRQ = (_0) => __async(void 0, [_0], function* ({
 }) {
 });
 
+// src/hooks/gameHooks.ts
+import { useMutation as useMutation2 } from "react-query";
+import {
+  doc,
+  writeBatch,
+  collection
+} from "firebase/firestore";
+import { useContext } from "react";
+var useAddGamesToPlayer = () => {
+  const { db } = useContext(FirebaseContext);
+  const mutation = useMutation2(addGamesToPlayerRQ);
+  const addGamesToPlayer = (userId, gamesArray) => __async(void 0, null, function* () {
+    if (db === null) {
+      throw new Error("DB is not initialized");
+    }
+    mutation.mutate({ db, userId, gamesArray });
+  });
+  return __spreadValues({ addGamesToPlayer }, mutation);
+};
+var addGamesToPlayerRQ = (_0) => __async(void 0, [_0], function* ({
+  db,
+  userId,
+  gamesArray
+}) {
+  const batch = writeBatch(db);
+  const playerRef = doc(db, "players", userId);
+  gamesArray.forEach((gameObject) => {
+    const gameCollectionName = `${gameObject.game.replace(/\s+/g, "")}Games`;
+    const gamesCollection = collection(playerRef, gameCollectionName);
+    const newGameRef = doc(gamesCollection);
+    batch.set(newGameRef, gameObject);
+  });
+  yield batch.commit().catch((error) => {
+    throw error;
+  });
+});
+
 // src/hooks/matchupFetchHooks.ts
 import { useQuery as useQuery2 } from "react-query";
-import { doc, getDoc } from "firebase/firestore";
+import { doc as doc2, getDoc } from "firebase/firestore";
 
 // src/constants/messages.ts
 var failedFetch = "Failed to fetch ";
@@ -128,9 +165,9 @@ var fromStore = " from Firestore.";
 var toStore = " to Firestore.";
 
 // src/hooks/matchupFetchHooks.ts
-import { useContext } from "react";
+import { useContext as useContext2 } from "react";
 var useFetchRoundRobin = (numberOfTeams) => {
-  const { db } = useContext(FirebaseContext);
+  const { db } = useContext2(FirebaseContext);
   return useQuery2(
     ["roundRobin", numberOfTeams],
     () => fetchRoundRobinRQ(db, numberOfTeams),
@@ -138,7 +175,7 @@ var useFetchRoundRobin = (numberOfTeams) => {
   );
 };
 var useFetchFinishedRoundRobin = (seasonName) => {
-  const { db } = useContext(FirebaseContext);
+  const { db } = useContext2(FirebaseContext);
   return useQuery2(
     ["roundRobinFinished", seasonName],
     () => fetchFinishedRoundRobinRQ(db, seasonName),
@@ -166,7 +203,7 @@ var fetchRoundRobinRQ = (db, numberOfTeams) => __async(void 0, null, function* (
   }
   const adjustedTeams = adjustNumberOfTeams(numberOfTeams);
   const scheduleName = `scheduleFor${adjustedTeams}Teams`;
-  const scheduleRef = doc(db, "roundRobinSchedules", scheduleName);
+  const scheduleRef = doc2(db, "roundRobinSchedules", scheduleName);
   const scheduleDoc = yield getDoc(scheduleRef);
   if (scheduleDoc.exists()) {
     return scheduleDoc.data();
@@ -180,7 +217,7 @@ var fetchFinishedRoundRobinRQ = (db, seasonId) => __async(void 0, null, function
   if (seasonId === void 0) {
     throw new Error("Season ID not provided");
   }
-  const scheduleRef = doc(db, "finishedRoundRobinSchedules", seasonId);
+  const scheduleRef = doc2(db, "finishedRoundRobinSchedules", seasonId);
   const scheduleDoc = yield getDoc(scheduleRef);
   if (scheduleDoc.exists()) {
     return scheduleDoc.data();
@@ -194,14 +231,14 @@ var fetchFinishedRoundRobinRQ = (db, seasonId) => __async(void 0, null, function
 // src/hooks/playerFetchHooks.ts
 import { useQuery as useQuery3 } from "react-query";
 import {
-  collection,
-  doc as doc2,
+  collection as collection2,
+  doc as doc3,
   getDoc as getDoc2,
   getDocs
 } from "firebase/firestore";
-import { useContext as useContext2 } from "react";
+import { useContext as useContext3 } from "react";
 var useFetchPastPlayerById = (email) => {
-  const { db } = useContext2(FirebaseContext);
+  const { db } = useContext3(FirebaseContext);
   return useQuery3(
     ["pastPlayer", email],
     () => fetchPastPlayerById(db, email),
@@ -212,24 +249,24 @@ var useFetchPastPlayerById = (email) => {
   );
 };
 var useFetchAllPastPlayers = () => {
-  const { db } = useContext2(FirebaseContext);
+  const { db } = useContext3(FirebaseContext);
   return useQuery3("pastPlayers", () => fetchAllPastPlayers(db));
 };
 var useFetchPlayerById = (id) => {
-  const { db } = useContext2(FirebaseContext);
+  const { db } = useContext3(FirebaseContext);
   return useQuery3(["player", id], () => fetchPlayerById(db, id), {
     enabled: !!id
   });
 };
 var useFetchAllPlayers = () => {
-  const { db } = useContext2(FirebaseContext);
+  const { db } = useContext3(FirebaseContext);
   return useQuery3("Players", () => fetchAllPlayers(db));
 };
 var fetchPastPlayerById = (db, email) => __async(void 0, null, function* () {
   if (email === void 0) {
     throw new Error("Player ID not provided");
   }
-  const playerDoc = doc2(db, "pastPlayers", email);
+  const playerDoc = doc3(db, "pastPlayers", email);
   const playerDocSnapshot = yield getDoc2(playerDoc);
   if (playerDocSnapshot.exists()) {
     return __spreadValues({
@@ -240,12 +277,12 @@ var fetchPastPlayerById = (db, email) => __async(void 0, null, function* () {
   }
 });
 var fetchAllPastPlayers = (db) => __async(void 0, null, function* () {
-  const querySnapshot = yield getDocs(collection(db, "pastPlayers"));
+  const querySnapshot = yield getDocs(collection2(db, "pastPlayers"));
   const playersData = [];
-  querySnapshot.forEach((doc4) => {
-    const playerData = doc4.data();
+  querySnapshot.forEach((doc5) => {
+    const playerData = doc5.data();
     playersData.push(__spreadProps(__spreadValues({}, playerData), {
-      id: doc4.id
+      id: doc5.id
     }));
   });
   return playersData;
@@ -254,7 +291,7 @@ var fetchPlayerById = (db, id) => __async(void 0, null, function* () {
   if (id === void 0) {
     throw new Error("Player ID not provided");
   }
-  const userDoc = doc2(db, "players", id);
+  const userDoc = doc3(db, "players", id);
   const userDocSnapshot = yield getDoc2(userDoc);
   if (userDocSnapshot.exists()) {
     return __spreadValues({
@@ -265,21 +302,21 @@ var fetchPlayerById = (db, id) => __async(void 0, null, function* () {
   }
 });
 var fetchAllPlayers = (db) => __async(void 0, null, function* () {
-  const querySnapshot = yield getDocs(collection(db, "players"));
+  const querySnapshot = yield getDocs(collection2(db, "players"));
   const playersData = [];
-  querySnapshot.forEach((doc4) => {
-    const playerData = doc4.data();
+  querySnapshot.forEach((doc5) => {
+    const playerData = doc5.data();
     playersData.push(__spreadProps(__spreadValues({}, playerData), {
-      id: doc4.id
+      id: doc5.id
     }));
   });
   return playersData;
 });
 
 // src/hooks/scheduleUpdateHooks.ts
-import { useMutation as useMutation3 } from "react-query";
+import { useMutation as useMutation4 } from "react-query";
 var useUpdateSeasonSchedule = () => {
-  return useMutation3(updateSeasonScheduleRQ);
+  return useMutation4(updateSeasonScheduleRQ);
 };
 var updateSeasonScheduleRQ = (_0) => __async(void 0, [_0], function* ({
   seasonName,
@@ -300,24 +337,34 @@ var fetchTeamByIdRQ = (teamId) => __async(void 0, null, function* () {
 });
 
 // src/hooks/updatePlayerHooks.ts
-import { useMutation as useMutation4 } from "react-query";
-import { updateDoc, doc as doc3, setDoc } from "firebase/firestore";
-import { useContext as useContext3 } from "react";
+import { useMutation as useMutation5 } from "react-query";
+import {
+  updateDoc as updateDoc2,
+  doc as doc4,
+  setDoc as setDoc2
+} from "firebase/firestore";
+import { useContext as useContext4 } from "react";
 var useCreatePlayer = () => {
-  const { db } = useContext3(FirebaseContext);
-  const mutation = useMutation4(createPlayerRQ);
-  console.log("test");
-  const createPlayer = (userId, playerData) => __async(void 0, null, function* () {
+  const { db } = useContext4(FirebaseContext);
+  const mutation = useMutation5(createPlayerRQ);
+  const createPlayer = (userId, playerData, onCreatePlayerSuccess) => __async(void 0, null, function* () {
     if (db === null) {
       throw new Error("DB is not initialized");
     }
-    mutation.mutate({ db, userId, playerData });
+    mutation.mutate(
+      { db, userId, playerData },
+      {
+        onSuccess: () => {
+          onCreatePlayerSuccess == null ? void 0 : onCreatePlayerSuccess();
+        }
+      }
+    );
   });
   return __spreadValues({ createPlayer }, mutation);
 };
 var useUpdatePlayer = (playerId, playerData) => {
-  const { db } = useContext3(FirebaseContext);
-  const mutation = useMutation4(updatePlayerRQ);
+  const { db } = useContext4(FirebaseContext);
+  const mutation = useMutation5(updatePlayerRQ);
   const updatePlayer = (playerId2, playerData2) => __async(void 0, null, function* () {
     if (db === null) {
       throw new Error("DB is not initialized");
@@ -331,8 +378,8 @@ var createPlayerRQ = (_0) => __async(void 0, [_0], function* ({
   userId,
   playerData
 }) {
-  const playerRef = doc3(db, "players", userId);
-  yield setDoc(playerRef, __spreadProps(__spreadValues({}, playerData), {
+  const playerRef = doc4(db, "players", userId);
+  yield setDoc2(playerRef, __spreadProps(__spreadValues({}, playerData), {
     isAdmin: false,
     leagues: [],
     seasons: [],
@@ -344,15 +391,15 @@ var updatePlayerRQ = (_0) => __async(void 0, [_0], function* ({
   playerData,
   db
 }) {
-  const playerRef = doc3(db, "player", playerId);
-  yield updateDoc(playerRef, playerData);
+  const playerRef = doc4(db, "player", playerId);
+  yield updateDoc2(playerRef, playerData);
 });
 
 // src/hooks/useAuth.ts
-import { useState as useState2, useEffect as useEffect2, useContext as useContext4 } from "react";
+import { useState as useState2, useEffect as useEffect2, useContext as useContext5 } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 var useAuth = () => {
-  const { auth } = useContext4(FirebaseContext);
+  const { auth } = useContext5(FirebaseContext);
   const [user, setUser] = useState2(null);
   useEffect2(() => {
     if (!auth) {
@@ -374,14 +421,14 @@ import {
   signOut,
   onAuthStateChanged as onAuthStateChanged2
 } from "firebase/auth";
-import { useContext as useContext5 } from "react";
+import { useContext as useContext6 } from "react";
 var LOGIN_MODES = {
   LOGIN: "login",
   REGISTER: "register",
   RESET_PASSWORD: "resetPassword"
 };
 var registerUser = (email, password) => __async(void 0, null, function* () {
-  const { auth } = useContext5(FirebaseContext);
+  const { auth } = useContext6(FirebaseContext);
   try {
     const response = yield createUserWithEmailAndPassword(
       auth,
@@ -394,7 +441,7 @@ var registerUser = (email, password) => __async(void 0, null, function* () {
   }
 });
 var loginUser = (email, password) => __async(void 0, null, function* () {
-  const { auth } = useContext5(FirebaseContext);
+  const { auth } = useContext6(FirebaseContext);
   try {
     const response = yield signInWithEmailAndPassword(auth, email, password);
     return response.user;
@@ -403,7 +450,7 @@ var loginUser = (email, password) => __async(void 0, null, function* () {
   }
 });
 var resetPassword = (email) => __async(void 0, null, function* () {
-  const { auth } = useContext5(FirebaseContext);
+  const { auth } = useContext6(FirebaseContext);
   try {
     yield sendPasswordResetEmail(auth, email);
     alert("Reset Password sent to your Email");
@@ -422,7 +469,7 @@ var sendVerificationEmail = (user) => __async(void 0, null, function* () {
   }
 });
 var logoutUser = () => __async(void 0, null, function* () {
-  const { auth } = useContext5(FirebaseContext);
+  const { auth } = useContext6(FirebaseContext);
   try {
     yield signOut(auth);
   } catch (error) {
@@ -431,13 +478,14 @@ var logoutUser = () => __async(void 0, null, function* () {
   }
 });
 var observeAuthState = (callback) => {
-  const { auth } = useContext5(FirebaseContext);
+  const { auth } = useContext6(FirebaseContext);
   return onAuthStateChanged2(auth, callback);
 };
 export {
   FirebaseContext,
   FirebaseProvider,
   LOGIN_MODES,
+  addGamesToPlayerRQ,
   addSeasonRQ,
   createPlayerRQ,
   createSuccess,
@@ -464,6 +512,7 @@ export {
   updateSeasonRQ,
   updateSeasonScheduleRQ,
   updateSuccess,
+  useAddGamesToPlayer,
   useAddSeason,
   useAuth,
   useCreatePlayer,
