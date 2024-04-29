@@ -33,7 +33,7 @@ import { createPlayerRQ } from './updatePlayerHooks';
 // 1. HOOKS
 // ------------------------------
 
-export const useFetchPastPlayerById = (email: Email | undefined) => {
+export const useFetchPastPlayerById = (email: Email | string | undefined) => {
   const { db } = useContext(FirebaseContext);
 
   return useQuery(
