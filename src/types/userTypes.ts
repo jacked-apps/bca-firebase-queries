@@ -3,7 +3,7 @@ import * as Shared from './sharedTypes';
 // Represents a player (archive) in pastPlayers collection
 // Names includes: firstName, lastName, nickName
 export type PastPlayer = Shared.Names & {
-  id: Shared.Email; // the Email of the player also the id of the document
+  id: Shared.Email | string; // the Email of the player also the id of the document
   currentUserId?: Shared.PlayerId;
   email: Shared.Email; // Email of the player
   dob: string; // Date of birth of the player

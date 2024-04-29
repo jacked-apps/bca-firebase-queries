@@ -289,7 +289,7 @@ type TeamPlayer = {
 };
 
 type PastPlayer = Names & {
-    id: Email;
+    id: Email | string;
     currentUserId?: PlayerId;
     email: Email;
     dob: string;
@@ -490,7 +490,7 @@ declare const useFetchAllPlayers: () => react_query.UseQueryResult<Player[], unk
  * @returns A Promise resolving to the PastPlayer object if found, or null if not found.
  * @throws Error if ID is not provided.
  */
-declare const fetchPastPlayerById: (db: Firestore, email: Email | undefined) => Promise<PastPlayer | null>;
+declare const fetchPastPlayerById: (db: Firestore, email: undefined | string) => Promise<PastPlayer | null>;
 /**
  * Fetches a Player object by ID from Firestore.
  *

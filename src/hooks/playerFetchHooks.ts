@@ -77,7 +77,7 @@ export const useFetchAllPlayers = () => {
  */
 export const fetchPastPlayerById = async (
   db: Firestore,
-  email: Email | undefined
+  email: undefined | string
 ): Promise<PastPlayer | null> => {
   if (email === undefined) {
     throw new Error('Player ID not provided');
@@ -86,7 +86,7 @@ export const fetchPastPlayerById = async (
   const playerDocSnapshot = await getDoc(playerDoc);
   if (playerDocSnapshot.exists()) {
     return {
-      id: playerDocSnapshot.id as Email,
+      id: playerDocSnapshot.id,
       ...(playerDocSnapshot.data() as Omit<PastPlayer, 'id'>),
     };
   } else {
