@@ -479,7 +479,7 @@ declare const addGamesToPlayerRQ: ({ db, userId, gamesArray, }: {
 declare const useFetchRoundRobin: (numberOfTeams: number | undefined) => react_query.UseQueryResult<RoundRobinSchedule | null, unknown>;
 declare const useFetchFinishedRoundRobin: (seasonName: SeasonName | undefined) => react_query.UseQueryResult<RoundRobinScheduleFinished | null, unknown>;
 
-declare const useFetchPastPlayerById: (email: Email | undefined) => react_query.UseQueryResult<PastPlayer | null, unknown>;
+declare const useFetchPastPlayerById: (email: Email | string | undefined) => react_query.UseQueryResult<PastPlayer | null, unknown>;
 declare const useFetchAllPastPlayers: () => react_query.UseQueryResult<PastPlayer[], unknown>;
 declare const useFetchPlayerById: (id: string | undefined) => react_query.UseQueryResult<Player | null, unknown>;
 declare const useFetchAllPlayers: () => react_query.UseQueryResult<Player[], unknown>;
@@ -988,4 +988,157 @@ declare const deleteFailed = "Failed to remove ";
 declare const fromStore = " from Firestore.";
 declare const toStore = " to Firestore.";
 
-export { type ActivePlayer, type BarePlayer, type DateFormat, type DateOrStamp, type DayOfWeek, type Email, FirebaseContext, FirebaseProvider, type Game, type GameOnPlayer, type GamePlay, type GamePlayResults, type Holiday, LOGIN_MODES, type Lineup, type MatchWeek, type MatchupId, type Names, type NotDate, type PastPlayer, type PastPlayerSeasonStat, type PastPlayerStats, type Player, type PlayerId, type PlayerLeague, type PlayerSeason, type PlayerTeam, type PoolHall, type RoundRobinSchedule, type RoundRobinScheduleFinished, type Schedule, type Season, type SeasonName, type StampOrInvalid, type TableMatchup, type TableMatchupFinished, type Team, type TeamId, type TeamInfo, type TeamName, type TeamPlayer, type TeamPlayerRole, type TimeOfYear, type Timestamp, addGamesToPlayerRQ, addSeasonRQ, createPlayerRQ, createSuccess, deleteFailed, deleteSuccess, failedCreate, failedFetch, failedUpdate, fetchPastPlayerById, fetchPlayerById, fetchSeasonRQ, fetchTeamByIdRQ, fromStore, loginUser, logoutUser, notFound, observeAuthState, registerUser, resetPassword, sendVerificationEmail, toStore, tryAgain, updatePlayerRQ, updateSeasonRQ, updateSeasonScheduleRQ, updateSuccess, useAddGamesToPlayer, useAddSeason, useAuth, useCreatePlayer, useFetchAllPastPlayers, useFetchAllPlayers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPlayerById, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useUpdatePlayer, useUpdateSeason, useUpdateSeasonSchedule };
+type USStates = (typeof usStates)[number];
+declare const usStates: readonly [{
+    readonly name: "Alabama";
+    readonly abbreviation: "AL";
+}, {
+    readonly name: "Alaska";
+    readonly abbreviation: "AK";
+}, {
+    readonly name: "Arizona";
+    readonly abbreviation: "AZ";
+}, {
+    readonly name: "Arkansas";
+    readonly abbreviation: "AR";
+}, {
+    readonly name: "California";
+    readonly abbreviation: "CA";
+}, {
+    readonly name: "Colorado";
+    readonly abbreviation: "CO";
+}, {
+    readonly name: "Connecticut";
+    readonly abbreviation: "CT";
+}, {
+    readonly name: "Delaware";
+    readonly abbreviation: "DE";
+}, {
+    readonly name: "Florida";
+    readonly abbreviation: "FL";
+}, {
+    readonly name: "Georgia";
+    readonly abbreviation: "GA";
+}, {
+    readonly name: "Hawaii";
+    readonly abbreviation: "HI";
+}, {
+    readonly name: "Idaho";
+    readonly abbreviation: "ID";
+}, {
+    readonly name: "Illinois";
+    readonly abbreviation: "IL";
+}, {
+    readonly name: "Indiana";
+    readonly abbreviation: "IN";
+}, {
+    readonly name: "Iowa";
+    readonly abbreviation: "IA";
+}, {
+    readonly name: "Kansas";
+    readonly abbreviation: "KS";
+}, {
+    readonly name: "Kentucky";
+    readonly abbreviation: "KY";
+}, {
+    readonly name: "Louisiana";
+    readonly abbreviation: "LA";
+}, {
+    readonly name: "Maine";
+    readonly abbreviation: "ME";
+}, {
+    readonly name: "Maryland";
+    readonly abbreviation: "MD";
+}, {
+    readonly name: "Massachusetts";
+    readonly abbreviation: "MA";
+}, {
+    readonly name: "Michigan";
+    readonly abbreviation: "MI";
+}, {
+    readonly name: "Minnesota";
+    readonly abbreviation: "MN";
+}, {
+    readonly name: "Mississippi";
+    readonly abbreviation: "MS";
+}, {
+    readonly name: "Missouri";
+    readonly abbreviation: "MO";
+}, {
+    readonly name: "Montana";
+    readonly abbreviation: "MT";
+}, {
+    readonly name: "Nebraska";
+    readonly abbreviation: "NE";
+}, {
+    readonly name: "Nevada";
+    readonly abbreviation: "NV";
+}, {
+    readonly name: "New Hampshire";
+    readonly abbreviation: "NH";
+}, {
+    readonly name: "New Jersey";
+    readonly abbreviation: "NJ";
+}, {
+    readonly name: "New Mexico";
+    readonly abbreviation: "NM";
+}, {
+    readonly name: "New York";
+    readonly abbreviation: "NY";
+}, {
+    readonly name: "North Carolina";
+    readonly abbreviation: "NC";
+}, {
+    readonly name: "North Dakota";
+    readonly abbreviation: "ND";
+}, {
+    readonly name: "Ohio";
+    readonly abbreviation: "OH";
+}, {
+    readonly name: "Oklahoma";
+    readonly abbreviation: "OK";
+}, {
+    readonly name: "Oregon";
+    readonly abbreviation: "OR";
+}, {
+    readonly name: "Pennsylvania";
+    readonly abbreviation: "PA";
+}, {
+    readonly name: "Rhode Island";
+    readonly abbreviation: "RI";
+}, {
+    readonly name: "South Carolina";
+    readonly abbreviation: "SC";
+}, {
+    readonly name: "South Dakota";
+    readonly abbreviation: "SD";
+}, {
+    readonly name: "Tennessee";
+    readonly abbreviation: "TN";
+}, {
+    readonly name: "Texas";
+    readonly abbreviation: "TX";
+}, {
+    readonly name: "Utah";
+    readonly abbreviation: "UT";
+}, {
+    readonly name: "Vermont";
+    readonly abbreviation: "VT";
+}, {
+    readonly name: "Virginia";
+    readonly abbreviation: "VA";
+}, {
+    readonly name: "Washington";
+    readonly abbreviation: "WA";
+}, {
+    readonly name: "West Virginia";
+    readonly abbreviation: "WV";
+}, {
+    readonly name: "Wisconsin";
+    readonly abbreviation: "WI";
+}, {
+    readonly name: "Wyoming";
+    readonly abbreviation: "WY";
+}];
+
+export { type ActivePlayer, type BarePlayer, type DateFormat, type DateOrStamp, type DayOfWeek, type Email, FirebaseContext, FirebaseProvider, type Game, type GameOnPlayer, type GamePlay, type GamePlayResults, type Holiday, LOGIN_MODES, type Lineup, type MatchWeek, type MatchupId, type Names, type NotDate, type PastPlayer, type PastPlayerSeasonStat, type PastPlayerStats, type Player, type PlayerId, type PlayerLeague, type PlayerSeason, type PlayerTeam, type PoolHall, type RoundRobinSchedule, type RoundRobinScheduleFinished, type Schedule, type Season, type SeasonName, type StampOrInvalid, type TableMatchup, type TableMatchupFinished, type Team, type TeamId, type TeamInfo, type TeamName, type TeamPlayer, type TeamPlayerRole, type TimeOfYear, type Timestamp, type USStates, addGamesToPlayerRQ, addSeasonRQ, createPlayerRQ, createSuccess, deleteFailed, deleteSuccess, failedCreate, failedFetch, failedUpdate, fetchPastPlayerById, fetchPlayerById, fetchSeasonRQ, fetchTeamByIdRQ, fromStore, loginUser, logoutUser, notFound, observeAuthState, registerUser, resetPassword, sendVerificationEmail, toStore, tryAgain, updatePlayerRQ, updateSeasonRQ, updateSeasonScheduleRQ, updateSuccess, usStates, useAddGamesToPlayer, useAddSeason, useAuth, useCreatePlayer, useFetchAllPastPlayers, useFetchAllPlayers, useFetchFinishedRoundRobin, useFetchPastPlayerById, useFetchPlayerById, useFetchRoundRobin, useFetchSeason, useFetchSeasons, useFetchTeamById, useFetchTeamsFromSeason, useUpdatePlayer, useUpdateSeason, useUpdateSeasonSchedule };

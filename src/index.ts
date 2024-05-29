@@ -15,4 +15,5 @@ export { useAuth } from './hooks/useAuth';
 export * from './Auth';
 export * from './types';
 export * from './constants/messages';
+export * from './constants/usStatesArray';
 //export * from './constants/functions';
