@@ -341,7 +341,11 @@ import { useMutation as useMutation5 } from "react-query";
 import {
   updateDoc as updateDoc2,
   doc as doc4,
-  setDoc as setDoc2
+  setDoc as setDoc2,
+  collection as collection3,
+  serverTimestamp as serverTimestamp2,
+  getDoc as getDoc3,
+  addDoc
 } from "firebase/firestore";
 import { useContext as useContext4 } from "react";
 var useCreatePlayer = () => {
@@ -393,6 +397,40 @@ var updatePlayerRQ = (_0) => __async(void 0, [_0], function* ({
 }) {
   const playerRef = doc4(db, "players", playerId);
   yield updateDoc2(playerRef, playerData);
+  playerUpdateHistory(db, playerId, playerData);
+});
+var playerUpdateHistory = (db, playerId, newData) => __async(void 0, null, function* () {
+  const allChangeKeys = Object.keys(newData);
+  const ignoreKeys = ["id", "isAdmin", "leagues", "seasons", "teams"];
+  const changeKeys = allChangeKeys.filter(
+    (key) => !ignoreKeys.includes(key)
+  );
+  if (changeKeys.length === 0) {
+    return;
+  }
+  const playerRef = doc4(db, "players", playerId);
+  const playerDocSnapshot = yield getDoc3(playerRef);
+  if (!playerDocSnapshot.exists()) {
+    throw new Error("Player does not exist");
+  }
+  const oldData = playerDocSnapshot.data();
+  const changesToSave = changeKeys.reduce((acc, key) => {
+    const oldValue = oldData[key];
+    return acc;
+  }, {});
+  if (Object.keys(changesToSave).length > 0) {
+    const changeHistoryRef = collection3(
+      db,
+      "players",
+      playerId,
+      "changeHistory"
+    );
+    yield addDoc(changeHistoryRef, {
+      playerId,
+      changes: changesToSave,
+      timestamp: serverTimestamp2()
+    });
+  }
 });
 
 // src/hooks/useAuth.ts

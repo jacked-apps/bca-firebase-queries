@@ -24,10 +24,13 @@ import {
   Firestore,
   collection,
   serverTimestamp,
+  getDoc,
+  addDoc,
 } from 'firebase/firestore';
 import { BarePlayer, Player } from '../types';
 import { useContext } from 'react';
 import { FirebaseContext } from '../FirebaseProvider';
+import { isValidEmail } from '../constants/functions';
 
 // types
 
@@ -128,4 +131,56 @@ export const updatePlayerRQ = async ({
 }) => {
   const playerRef = doc(db, 'players', playerId);
   await updateDoc(playerRef, playerData);
+  playerUpdateHistory(db, playerId, playerData);
+};
+
+/**
+ * Updates the player's data in the database and records the changes in the player's change history.
+ *
+ * @param db - The Firestore database instance.
+ * @param playerId - The ID of the player whose data is being updated.
+ * @param newData - The new data to be saved for the player.
+ * @throws {Error} If the player does not exist in the database.
+ */
+
+const playerUpdateHistory = async (
+  db: Firestore,
+  playerId: string,
+  newData: Partial<BarePlayer>
+) => {
+  const allChangeKeys = Object.keys(newData);
+  const ignoreKeys = ['id', 'isAdmin', 'leagues', 'seasons', 'teams'];
+
+  const changeKeys = allChangeKeys.filter(
+    (key) => !ignoreKeys.includes(key as keyof BarePlayer)
+  );
+  if (changeKeys.length === 0) {
+    return;
+  }
+  const playerRef = doc(db, 'players', playerId);
+  const playerDocSnapshot = await getDoc(playerRef);
+
+  if (!playerDocSnapshot.exists()) {
+    throw new Error('Player does not exist');
+  }
+  const oldData = playerDocSnapshot.data() as Player;
+
+  const changesToSave = changeKeys.reduce((acc, key) => {
+    const oldValue = oldData[key as keyof BarePlayer];
+    return acc;
+  }, {} as Partial<BarePlayer>);
+
+  if (Object.keys(changesToSave).length > 0) {
+    const changeHistoryRef = collection(
+      db,
+      'players',
+      playerId,
+      'changeHistory'
+    );
+    await addDoc(changeHistoryRef, {
+      playerId,
+      changes: changesToSave,
+      timestamp: serverTimestamp(),
+    });
+  }
 };
