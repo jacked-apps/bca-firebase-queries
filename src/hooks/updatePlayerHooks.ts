@@ -2,9 +2,11 @@
 // TABLE OF CONTENTS
 // ------------------------------
 // 1. Hooks
-//    - useAddOrUpdateSeason
+//    - useCreatePlayer
+//    - useUpdatePlayer
 // 2. FireBaseFunctions
-//    - addOrUpdateSeasonRQ
+//    - createPlayerRQ
+//    - updatePlayerRQ
 
 //------------------------
 // IMPORTS
@@ -62,10 +64,7 @@ export const useCreatePlayer = () => {
   return { createPlayer, ...mutation };
 };
 
-export const useUpdatePlayer = (
-  playerId: string,
-  playerData: Partial<Player>
-) => {
+export const useUpdatePlayer = () => {
   const { db } = useContext(FirebaseContext);
   const mutation = useMutation(updatePlayerRQ);
   const updatePlayer = async (
