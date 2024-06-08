@@ -362,14 +362,14 @@ var useCreatePlayer = () => {
   });
   return __spreadValues({ createPlayer }, mutation);
 };
-var useUpdatePlayer = (playerId, playerData) => {
+var useUpdatePlayer = () => {
   const { db } = useContext4(FirebaseContext);
   const mutation = useMutation5(updatePlayerRQ);
-  const updatePlayer = (playerId2, playerData2) => __async(void 0, null, function* () {
+  const updatePlayer = (playerId, playerData) => __async(void 0, null, function* () {
     if (db === null) {
       throw new Error("DB is not initialized");
     }
-    mutation.mutate({ db, playerId: playerId2, playerData: playerData2 });
+    mutation.mutate({ db, playerId, playerData });
   });
   return __spreadValues({ updatePlayer }, mutation);
 };
@@ -391,7 +391,7 @@ var updatePlayerRQ = (_0) => __async(void 0, [_0], function* ({
   playerData,
   db
 }) {
-  const playerRef = doc4(db, "player", playerId);
+  const playerRef = doc4(db, "players", playerId);
   yield updateDoc2(playerRef, playerData);
 });
 

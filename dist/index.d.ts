@@ -774,7 +774,7 @@ declare const useCreatePlayer: () => {
     }, unknown>;
     createPlayer: (userId: string, playerData: BarePlayer, onCreatePlayerSuccess?: () => void) => Promise<void>;
 };
-declare const useUpdatePlayer: (playerId: string, playerData: Partial<Player>) => {
+declare const useUpdatePlayer: () => {
     data: undefined;
     error: null;
     isError: false;

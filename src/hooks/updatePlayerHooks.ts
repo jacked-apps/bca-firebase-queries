@@ -126,6 +126,6 @@ export const updatePlayerRQ = async ({
   playerId: string;
   playerData: Partial<Player>;
 }) => {
-  const playerRef = doc(db, 'player', playerId);
+  const playerRef = doc(db, 'players', playerId);
   await updateDoc(playerRef, playerData);
 };
