@@ -27,7 +27,7 @@ import {
   getDoc,
   addDoc,
 } from 'firebase/firestore';
-import { BarePlayer, Player } from '../types';
+import { BarePlayer, Email, Player } from '../types';
 import { useContext } from 'react';
 import { FirebaseContext } from '../FirebaseProvider';
 import { isValidEmail } from '../constants/functions';
@@ -130,8 +130,8 @@ export const updatePlayerRQ = async ({
   playerData: Partial<Player>;
 }) => {
   const playerRef = doc(db, 'players', playerId);
+  await playerUpdateHistory(db, playerId, playerData);
   await updateDoc(playerRef, playerData);
-  playerUpdateHistory(db, playerId, playerData);
 };
 
 /**
@@ -143,44 +143,60 @@ export const updatePlayerRQ = async ({
  * @throws {Error} If the player does not exist in the database.
  */
 
-const playerUpdateHistory = async (
+export const playerUpdateHistory = async (
   db: Firestore,
   playerId: string,
   newData: Partial<BarePlayer>
 ) => {
+  // get the keys of the changes to be saved
   const allChangeKeys = Object.keys(newData);
   const ignoreKeys = ['id', 'isAdmin', 'leagues', 'seasons', 'teams'];
-
   const changeKeys = allChangeKeys.filter(
     (key) => !ignoreKeys.includes(key as keyof BarePlayer)
   );
+  // Quit if there are no changes to be made
   if (changeKeys.length === 0) {
     return;
   }
+  // get the current player data
   const playerRef = doc(db, 'players', playerId);
   const playerDocSnapshot = await getDoc(playerRef);
 
   if (!playerDocSnapshot.exists()) {
     throw new Error('Player does not exist');
   }
-  const oldData = playerDocSnapshot.data() as Player;
 
-  const changesToSave = changeKeys.reduce((acc, key) => {
-    const oldValue = oldData[key as keyof BarePlayer];
-    return acc;
-  }, {} as Partial<BarePlayer>);
+  const oldData = playerDocSnapshot.data() as BarePlayer;
 
-  if (Object.keys(changesToSave).length > 0) {
-    const changeHistoryRef = collection(
-      db,
-      'players',
-      playerId,
-      'changeHistory'
-    );
-    await addDoc(changeHistoryRef, {
-      playerId,
-      changes: changesToSave,
-      timestamp: serverTimestamp(),
-    });
+  // create the new data object to save
+  const changesToSave = {} as Partial<BarePlayer>;
+
+  changeKeys.forEach((key) => {
+    if (oldData.hasOwnProperty(key)) {
+      // Make sure each change is different from the old data
+      if (
+        oldData[key as keyof BarePlayer] === newData[key as keyof BarePlayer]
+      ) {
+        return;
+      }
+      if (key === 'email') {
+        changesToSave.email = newData.email;
+      } else {
+        changesToSave[key as keyof Omit<BarePlayer, 'email'>] =
+          oldData[key as keyof BarePlayer];
+      }
+    }
+  });
+
+  // Quit if there are no changes to save
+  if (Object.keys(changesToSave).length === 0) {
+    return;
   }
+  // add the changes to the player's change history
+  const changeHistoryRef = collection(playerRef, 'changeHistory');
+  console.log('inside history 4', changesToSave);
+  await addDoc(changeHistoryRef, {
+    changes: changesToSave,
+    timestamp: serverTimestamp(),
+  });
 };
