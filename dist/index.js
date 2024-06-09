@@ -420,7 +420,11 @@ var playerUpdateHistory = (db, playerId, newData) => __async(void 0, null, funct
       if (oldData[key] === newData[key]) {
         return;
       }
-      changesToSave[key] = oldData[key];
+      if (key === "email") {
+        changesToSave.email = newData.email;
+      } else {
+        changesToSave[key] = oldData[key];
+      }
     }
   });
   if (Object.keys(changesToSave).length === 0) {
@@ -574,6 +578,12 @@ var usStates = [
   { name: "Wisconsin", abbreviation: "WI" },
   { name: "Wyoming", abbreviation: "WY" }
 ];
+
+// src/constants/functions.ts
+var isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
 export {
   FirebaseContext,
   FirebaseProvider,
@@ -592,6 +602,7 @@ export {
   fetchSeasonRQ,
   fetchTeamByIdRQ,
   fromStore,
+  isValidEmail,
   loginUser,
   logoutUser,
   notFound,
